@@ -12,11 +12,13 @@ public abstract class AbsEasyCacheConfigProcessor implements Rebinder {
      * @param cacheConfig
      */
     public static void setParent(EasyCacheConfig cacheConfig) {
+        cacheConfig.setParent(cacheConfig);
         cacheConfig.getNs().forEach((namespace, nsConfig) -> {
 
             nsConfig.setParent(cacheConfig);
             nsConfig.setNamespace(namespace);
             nsConfig.getRemote().setParent(nsConfig);
+            nsConfig.getLocal().setParent(nsConfig);
             nsConfig.getRemote().getCacheName().forEach((cacheName, cacheNameConfig) -> {
 
                 cacheNameConfig.setParent(nsConfig);

@@ -3,6 +3,7 @@ package org.galileo.easycache.core.core;
 
 import org.galileo.easycache.common.CacheClient;
 import org.galileo.easycache.common.CacheProxy;
+import org.galileo.easycache.core.core.config.NamespaceConfig;
 import org.galileo.easycache.core.core.config.RemoteConfig;
 
 /**
@@ -10,8 +11,8 @@ import org.galileo.easycache.core.core.config.RemoteConfig;
  */
 public class AutoCache extends AbsCombinationCache {
 
-    public AutoCache(RemoteConfig remoteConfig, CacheClient localCache, CacheClient remoteCache) {
-        super(remoteConfig, (CacheProxy) localCache, (CacheProxy) remoteCache);
+    public AutoCache(NamespaceConfig namespaceConfig, CacheClient localCache, CacheClient remoteCache) {
+        super(namespaceConfig, (CacheProxy) localCache, (CacheProxy) remoteCache);
         this.cacheClientName = "AutoCache";
     }
 

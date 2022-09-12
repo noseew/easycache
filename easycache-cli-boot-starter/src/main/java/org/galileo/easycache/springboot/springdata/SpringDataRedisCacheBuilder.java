@@ -49,7 +49,7 @@ public class SpringDataRedisCacheBuilder extends ExternalCacheBuilder<SpringData
         redisTemplate.setHashKeySerializer(RedisSerializer.string());
         redisTemplate.setHashValueSerializer(RedisSerializer.json());
 
-        SpringDataCache cache = new SpringDataCache(remoteConfig, redisTemplate);
+        SpringDataCache cache = new SpringDataCache(namespaceConfig.getRemote(), redisTemplate);
         addTailFilter(cache);
         return createCacheProxy(cache);
     }

@@ -10,7 +10,7 @@ import java.util.Set;
 public class RedisCacheManagerListener extends AbsCacheOpEventListener {
 
     private RemoteConfig getRedisConfig(AbsCache cache) {
-        return cache.getRemoteConfig();
+        return cache.getNamespaceConfig().getRemote();
     }
 
     @Override

@@ -8,7 +8,7 @@ import org.galileo.easycache.common.constants.CacheConstants;
 import org.galileo.easycache.common.enums.CacheTagType;
 import org.galileo.easycache.core.core.AbsCache;
 import org.galileo.easycache.core.core.EasyCacheManager;
-import org.galileo.easycache.core.core.config.RemoteConfig;
+import org.galileo.easycache.core.core.config.NamespaceConfig;
 
 public class EasyCacheUtils {
 
@@ -27,7 +27,7 @@ public class EasyCacheUtils {
      */
     public static void put(String namespace, String cacheName, String key, Object val, long expireMilli) {
         CacheClient cacheClient = getCacheClient(namespace);
-        String fullKey = InnerKeyUtils.buildFullKey(getRemoteConfig((CacheProxy) cacheClient), CacheTagType.EASY_CACHE, cacheName, key);
+        String fullKey = InnerKeyUtils.buildFullKey(getNamespaceConfig((CacheProxy) cacheClient), CacheTagType.EASY_CACHE, cacheName, key);
         cacheClient.put(fullKey, ValWrapper.createInstance(expireMilli, val));
     }
 
@@ -43,7 +43,7 @@ public class EasyCacheUtils {
      */
     public static <T> T get(String namespace, String cacheName, String key, Class<T> valClass) {
         CacheClient cacheClient = getCacheClient(namespace);
-        String fullKey = InnerKeyUtils.buildFullKey(getRemoteConfig((CacheProxy) cacheClient), CacheTagType.EASY_CACHE, cacheName, key);
+        String fullKey = InnerKeyUtils.buildFullKey(getNamespaceConfig((CacheProxy) cacheClient), CacheTagType.EASY_CACHE, cacheName, key);
         ValWrapper valWrapper = cacheClient.get(fullKey);
         return valWrapper != null ? (T) valWrapper.getValue() : null;
     }
@@ -57,7 +57,7 @@ public class EasyCacheUtils {
      */
     public static void remove(String namespace, String cacheName, String key) {
         CacheClient cacheClient = getCacheClient(namespace);
-        String fullKey = InnerKeyUtils.buildFullKey(getRemoteConfig((CacheProxy) cacheClient), CacheTagType.EASY_CACHE, cacheName, key);
+        String fullKey = InnerKeyUtils.buildFullKey(getNamespaceConfig((CacheProxy) cacheClient), CacheTagType.EASY_CACHE, cacheName, key);
         cacheClient.remove(fullKey);
     }
 
@@ -86,7 +86,7 @@ public class EasyCacheUtils {
         return cacheProxy;
     }
 
-    private static RemoteConfig getRemoteConfig(CacheProxy cacheProxy) {
-        return ((AbsCache) (cacheProxy.unProxy())).getRemoteConfig();
+    private static NamespaceConfig getNamespaceConfig(CacheProxy cacheProxy) {
+        return ((AbsCache) (cacheProxy.unProxy())).getNamespaceConfig();
     }
 }

@@ -40,7 +40,6 @@ public class CacheRemoveService extends AbsCacheService {
         return cacheRemoveProcess(cache, fullKeys, cacheRemove.consistency(), invocation);
     }
 
-
     private Object cacheRemoveProcess(CacheProxy cache, Set<String> fullKeys, ConsistencyType consistencyType,
             MethodInvocation invocation) throws Throwable {
 

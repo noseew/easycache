@@ -13,8 +13,8 @@ public abstract class InternalCacheBuilder<T extends InternalCacheBuilder<T>> ex
     protected int maximumSize;
     protected Duration expireAfterWrite;
 
-    protected InternalCacheBuilder(RemoteConfig remoteConfig, InternalConfig internalConfig) {
-        super(remoteConfig);
+    protected InternalCacheBuilder(InternalConfig internalConfig) {
+        super(internalConfig.getParent());
         this.internalConfig = internalConfig;
     }
 

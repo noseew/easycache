@@ -6,6 +6,7 @@ import org.galileo.easycache.common.*;
 import org.galileo.easycache.common.constants.CacheConstants;
 import org.galileo.easycache.common.enums.CacheType;
 import org.galileo.easycache.common.enums.OpType;
+import org.galileo.easycache.core.core.config.NamespaceConfig;
 import org.galileo.easycache.core.core.config.RemoteConfig;
 import org.galileo.easycache.core.event.PubSub;
 import org.galileo.easycache.core.exception.CacheInterruptException;
@@ -31,6 +32,7 @@ public abstract class AbsExternalCache extends AbsCache implements PubSub, Nativ
     protected final SerialPolicy valueWrapperSerial;
     protected final SerialPolicy valueCompressSerial;
     protected final SerialPolicy valueSerial;
+    protected RemoteConfig remoteConfig;
 
     private final static ScheduledThreadPoolExecutor batchPubScheduled;
     private final Map<String, Set<String>> batchPubQueue = new ConcurrentHashMap<>();
@@ -42,7 +44,8 @@ public abstract class AbsExternalCache extends AbsCache implements PubSub, Nativ
     }
 
     protected AbsExternalCache(RemoteConfig remoteConfig) {
-        super(remoteConfig, CacheType.REMOTE);
+        super(remoteConfig.getParent(), CacheType.REMOTE);
+        this.remoteConfig = remoteConfig;
         keySerial = EasyCacheManager
                 .getSerialPolicy(remoteConfig.getKeySerialName(), EasyCacheManager.getSerialPolicy(SerialPolicy.STRING, null));
         valueWrapperSerial = EasyCacheManager.getSerialPolicy(remoteConfig.getValueWrapperSerialName(), EasyCacheManager
@@ -99,7 +102,7 @@ public abstract class AbsExternalCache extends AbsCache implements PubSub, Nativ
     @FilterProxy(opType = OpType.PUT)
     public <K, V> void put(String key, @ValParam(paramType = ValWrapper.class) ValWrapper valWrapper) {
         InnerAssertUtils.notNull(valWrapper, "'valWrapper' can not be null");
-        boolean cacheNullValue = remoteConfig.getParent().getParent().getPierceDefend().isCacheNullValue();
+        boolean cacheNullValue = namespaceConfig.getParent().getPierceDefend().isCacheNullValue();
         if (!cacheNullValue && valWrapper.getValue() == null) {
             return;
         }
@@ -121,7 +124,7 @@ public abstract class AbsExternalCache extends AbsCache implements PubSub, Nativ
     @FilterProxy(opType = OpType.PUT)
     public <K, V> boolean putIfAbsent(String key, @ValParam(paramType = ValWrapper.class) ValWrapper valWrapper) {
         InnerAssertUtils.notNull(valWrapper, "'valWrapper' can not be null");
-        boolean cacheNullValue = remoteConfig.getParent().getParent().getPierceDefend().isCacheNullValue();
+        boolean cacheNullValue = namespaceConfig.getParent().getPierceDefend().isCacheNullValue();
         if (!cacheNullValue && valWrapper.getValue() == null) {
             return false;
         }
@@ -197,7 +200,7 @@ public abstract class AbsExternalCache extends AbsCache implements PubSub, Nativ
 
     @Override
     public Object serialVal(ValWrapper valWrapper) {
-        return InnerCodecUtils.serialVal(valWrapper, this.valueSerial, this.valueCompressSerial, remoteConfig.getCompressThreshold());
+        return InnerCodecUtils.serialVal(valWrapper, this.valueSerial, this.valueCompressSerial, namespaceConfig.getCompressThreshold());
     }
 
     private void startBatchPubTask() {

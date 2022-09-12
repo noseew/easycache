@@ -50,30 +50,6 @@ public abstract class AbsCacheService implements ApplicationContextAware {
         this.applicationContext = applicationContext;
     }
 
-    public long getLoadTime(long minTime, long maxTime) {
-//        LoadValContext loadValContext = CacheContextUtils.getLoadValContext();
-//        if (loadValContext != null) {
-//            long time = cacheLoadService.getTime(loadValContext.getNamespace(), loadValContext.getCacheName());
-//            return Math.max(Math.min(maxTime, time), minTime);
-//        }
-        return maxTime;
-    }
-
-    public void preLoadVal() {
-//        LoadValContext loadValContext = CacheContextUtils.getLoadValContext();
-//        if (loadValContext != null) {
-//            loadValContext.setStart(System.currentTimeMillis());
-//        }
-    }
-
-    public void postLoadVal() {
-//        LoadValContext loadValContext = CacheContextUtils.getLoadValContext();
-//        if (loadValContext != null) {
-//            loadValContext.setOpMillis(System.currentTimeMillis() - loadValContext.getStart());
-//            cacheLoadService.setTime(loadValContext.getNamespace(), loadValContext.getCacheName(), loadValContext.getOpMillis());
-//        }
-    }
-
     public String buildFullKey(String namespace, String cacheName, String key) {
         return InnerKeyUtils.buildFullKey(easyCacheConfig, namespace, CacheTagType.EASY_CACHE, cacheName, key);
     }
@@ -171,37 +147,35 @@ public abstract class AbsCacheService implements ApplicationContextAware {
         return cacheName;
     }
 
-    public void executeWithinTrans(Runnable cacheRunnable, Runnable cacheCompensation, boolean injectTrans) {
+    /**
+     * 在事务中执行
+     *
+     * @param mainTask         主任务
+     * @param compensationTask 失败补偿任务
+     * @param injectTrans      是否要在事务中
+     */
+    public void executeWithinTrans(Runnable mainTask, Runnable compensationTask, boolean injectTrans) {
         // 在事务中
         if (injectTrans && TransactionSynchronizationManager.isActualTransactionActive()) {
             // 创建事务回调
             TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
-
                 @Override
                 public void afterCompletion(int status) {
                     if (TransactionSynchronization.STATUS_ROLLED_BACK == status) {
                         // 提交事务后执行, 如果事务回滚了则执行
-                        cacheCompensation.run();
+                        compensationTask.run();
                     }
                 }
-
-//                @Override
-//                public void afterCommit() {
-//                    // 提交事务后执行
-//                    if (!injectTrans) {
-//                        cacheRunnable.run();
-//                    }
-//                }
 
                 @Override
                 public void beforeCommit(boolean readOnly) {
                     // 提交事务前执行
-                    cacheRunnable.run();
+                    mainTask.run();
                 }
             });
         } else {
             // 没有事务直接执行
-            cacheRunnable.run();
+            mainTask.run();
         }
     }
 
@@ -244,10 +218,6 @@ public abstract class AbsCacheService implements ApplicationContextAware {
             logger.error("EasyCache cache get error ", e);
         }
         return null;
-    }
-
-    public Object getVal(ValWrapper valWrapper) {
-        return valWrapper != null ? valWrapper.getValue() : null;
     }
 
     public void removeCache(CacheProxy cache, String fullKey) {

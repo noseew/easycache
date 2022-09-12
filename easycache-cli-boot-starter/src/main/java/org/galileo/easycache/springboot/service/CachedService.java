@@ -40,13 +40,7 @@ public class CachedService extends AbsCacheService {
 
         long expireByPolicy = getExpireByPolicy(cached.expirePolicy(), target, method, args);
         long expire = getExpire(namespace, cacheName, dynaKey, cached.expire(), expireByPolicy);
-//        try {
-//            LoadValContext loadValContext = new LoadValContext(namespace, cacheName, fullKey);
-//            CacheContextUtils.addLoadValContext(loadValContext);
-            return cachedProcess(cache, fullKey, expire, cached.breakDown(), invocation);
-//        } finally {
-//            CacheContextUtils.removeLoadVal();
-//        }
+        return cachedProcess(cache, fullKey, expire, cached.breakDown(), invocation);
     }
 
     private Object cachedProcess(CacheProxy cache, String fullKey, long expire, BreakdownType breakdownType,
@@ -64,7 +58,7 @@ public class CachedService extends AbsCacheService {
             }
             if (BreakdownType.RENEWAL.equals(breakdownType)) {
                 CacheLock redisLocker = cache.getCacheLocker(false);
-                long lockTime = getLoadTime(200, easyCacheConfig.getPierceDefend().getLockTime().toMillis());
+                long lockTime = easyCacheConfig.getPierceDefend().getLockTime().toMillis();
                 boolean locked = false;
                 try {
                     locked = redisLocker.lock(lockKey, lockTime);
@@ -81,21 +75,19 @@ public class CachedService extends AbsCacheService {
                     if (easyCacheConfig.isDebug()) {
                         logger.debug("EasyCache 续期缓存生效, 续期并加载缓存, key={} ", fullKey);
                     }
-//                    preLoadVal();
                     // 续期先
                     renewalVal(valWrapper, lockTime + 1000);
                     putCache(cache, fullKey, valWrapper);
                     // 更新
                     return processedAndFillCache(true, expire, invocation, cache, fullKey);
                 } finally {
-//                    postLoadVal();
                     redisLocker.unlock(lockKey);
                 }
             }
         }
 
         CacheLock jvmLocker = cache.getCacheLocker(true);
-        long waitTime = getLoadTime(10, easyCacheConfig.getPierceDefend().getLockTime().toMillis());
+        long waitTime = easyCacheConfig.getPierceDefend().getLockTime().toMillis();
         boolean locked = false;
         try {
             locked = jvmLocker.lock(lockKey, waitTime + 10);
@@ -122,12 +114,10 @@ public class CachedService extends AbsCacheService {
             if (easyCacheConfig.isDebug()) {
                 logger.debug("EasyCache 缓存穿透, key={} ", fullKey);
             }
-//            preLoadVal();
             // 清除可能的旧值
             removeCache(cache, fullKey);
             return processedAndFillCache(false, expire, invocation, cache, fullKey);
         } finally {
-//            postLoadVal();
             jvmLocker.unlock(lockKey);
         }
     }

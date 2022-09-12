@@ -5,6 +5,7 @@ import org.galileo.easycache.common.*;
 import org.galileo.easycache.common.enums.CacheTagType;
 import org.galileo.easycache.common.enums.CacheType;
 import org.galileo.easycache.common.enums.OpType;
+import org.galileo.easycache.core.core.config.NamespaceConfig;
 import org.galileo.easycache.core.core.config.RemoteConfig;
 import org.galileo.easycache.core.filter.AbsInvokeFilter;
 import org.galileo.easycache.core.filter.FilterContext;
@@ -77,11 +78,11 @@ public class CacheProxyFactory {
 
                                 // Redis 客户端操作
                                 if (target.getCacheType() == CacheType.REMOTE && opType.isRedisCollection()) {
-                                    RemoteConfig namespaceConfig = ((AbsExternalCache) target.unProxy()).remoteConfig;
+                                    NamespaceConfig namespaceConfig = ((AbsExternalCache) target.unProxy()).getNamespaceConfig();
                                     String cacheName = args[0].toString();
                                     CacheTagType cacheTagType = opType.isSet() ? CacheTagType.SET : CacheTagType.ZSET;
                                     args[0] = InnerKeyUtils.buildFullKey(namespaceConfig, cacheTagType, cacheName);
-                                    if (namespaceConfig.getParent().getParent().isDebug()) {
+                                    if (namespaceConfig.getParent().isDebug()) {
                                         logger.debug("EasyCache Redis 客户端操作 cacheName={} 替换成key={}", cacheName, args[0]);
                                     }
                                 }
@@ -122,7 +123,7 @@ public class CacheProxyFactory {
             keys = (Set) args[0];
         }
 
-        FilterContext context = new FilterContext(target, ((AbsCache) target).remoteConfig, key, keys, filterProxy.opType(), method, args);
+        FilterContext context = new FilterContext(target, ((AbsCache) target).getNamespaceConfig(), key, keys, filterProxy.opType(), method, args);
         if (filterProxy.hasValParam()) {
             Parameter[] parameters = method.getParameters();
             for (int i = 0; i < args.length; i++) {

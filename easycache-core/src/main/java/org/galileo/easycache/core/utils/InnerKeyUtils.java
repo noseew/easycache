@@ -4,6 +4,7 @@ package org.galileo.easycache.core.utils;
 import org.apache.commons.lang3.StringUtils;
 import org.galileo.easycache.common.enums.CacheTagType;
 import org.galileo.easycache.core.core.config.EasyCacheConfig;
+import org.galileo.easycache.core.core.config.NamespaceConfig;
 import org.galileo.easycache.core.core.config.RemoteConfig;
 
 public class InnerKeyUtils {
@@ -14,12 +15,12 @@ public class InnerKeyUtils {
 
     }
 
-    public static String buildFullKey(RemoteConfig namespaceConfig, CacheTagType cacheTagType, String cacheName) {
+    public static String buildFullKey(NamespaceConfig namespaceConfig, CacheTagType cacheTagType, String cacheName) {
         return buildFullKey(namespaceConfig, cacheTagType, cacheName, null);
     }
 
-    public static String buildFullKey(RemoteConfig namespaceConfig, CacheTagType cacheTagType, String cacheName, String key) {
-        EasyCacheConfig cacheConfig = namespaceConfig.getParent().getParent();
+    public static String buildFullKey(NamespaceConfig namespaceConfig, CacheTagType cacheTagType, String cacheName, String key) {
+        EasyCacheConfig cacheConfig = namespaceConfig.getParent();
         return buildFullKey(cacheConfig, namespaceConfig.getNamespace(), cacheTagType, cacheName, key);
     }
 

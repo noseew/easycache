@@ -6,6 +6,12 @@ import org.galileo.easycache.common.constants.CacheConstants;
 import java.time.Duration;
 
 public class InheritableConfig<P extends InheritableConfig> {
+
+    /**
+     * 当前namespace名
+     */
+    private String namespace = CacheConstants.DEFAULT_NAMESPACE;
+    
     /**
      *
      */
@@ -39,6 +45,14 @@ public class InheritableConfig<P extends InheritableConfig> {
      *
      */
     private int compressThreshold = CacheConstants.COMPRESS_THRESHOLD;
+
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public void setNamespace(String namespace) {
+        this.namespace = namespace;
+    }
 
     public P getParent() {
         return parent;

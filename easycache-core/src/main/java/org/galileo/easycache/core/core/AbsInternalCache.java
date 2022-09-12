@@ -16,13 +16,14 @@ import java.util.Set;
 
 public abstract class AbsInternalCache extends AbsCache {
 
-    protected InternalConfig caffeineConfig;
+    protected InternalConfig internalConfig;
+    
     protected AbsExternalCache remoteCache;
 
-    protected AbsInternalCache(InternalConfig caffeineConfig) {
-        super(null, CacheType.LOCAL);
+    protected AbsInternalCache(InternalConfig internalConfig) {
+        super(internalConfig.getParent(), CacheType.LOCAL);
+        this.internalConfig = internalConfig;
         this.cacheLock = new JvmCacheLock();
-        this.caffeineConfig = caffeineConfig;
         
         registerRemoveConsumer();
     }
@@ -50,7 +51,7 @@ public abstract class AbsInternalCache extends AbsCache {
     public <K, V> void put(String key, @ValParam(paramType = ValWrapper.class) ValWrapper valWrapper) {
         try {
             long expire = valWrapper.getRealExpireTs() - System.currentTimeMillis();
-            long configMaxExpire = caffeineConfig.getExpireAfterWrite().toMillis();
+            long configMaxExpire = internalConfig.getExpireAfterWrite().toMillis();
             doPut(key, valWrapper, Math.min(expire, configMaxExpire));
         } catch (Exception e) {
             logger.error("EasyCache doPut error, key={}", key, e);
@@ -66,7 +67,7 @@ public abstract class AbsInternalCache extends AbsCache {
     public boolean putIfAbsent(String key, @ValParam(paramType = ValWrapper.class) ValWrapper valWrapper) {
         try {
             long expire = valWrapper.getRealExpireTs() - System.currentTimeMillis();
-            long configMaxExpire = caffeineConfig.getExpireAfterWrite().toMillis();
+            long configMaxExpire = internalConfig.getExpireAfterWrite().toMillis();
             return this.doPutIfAbsent(key, valWrapper, Math.min(expire, configMaxExpire));
         } catch (Exception e) {
             logger.error("EasyCache doPutIfAbsent error, key={}", key, e);

@@ -13,14 +13,14 @@ public abstract class ExternalCacheBuilder<T extends ExternalCacheBuilder<T>>
         extends AbstractCacheBuilder<ExternalCacheBuilder<T>> {
 
     protected ExternalCacheBuilder(RemoteConfig remoteConfig) {
-        super(remoteConfig);
+        super(remoteConfig.getParent());
     }
 
     public T buildKeySerial(SerialPolicy serialPolicy) {
         InnerAssertUtils.notNull(serialPolicy, "'KeySerial' can not be null");
         InnerAssertUtils.notNull(serialPolicy.decoder(), "'KeySerial' decoder can not be null");
         InnerAssertUtils.notNull(serialPolicy.encoder(), "'KeySerial' encoder can not be null");
-        remoteConfig.setKeySerialName(serialPolicy.name());
+        namespaceConfig.setKeySerialName(serialPolicy.name());
         return (T) this;
     }
 
@@ -28,7 +28,7 @@ public abstract class ExternalCacheBuilder<T extends ExternalCacheBuilder<T>>
         InnerAssertUtils.notNull(serialPolicy, "'ValueSerial' can not be null");
         InnerAssertUtils.notNull(serialPolicy.decoder(), "'ValueSerial' decoder can not be null");
         InnerAssertUtils.notNull(serialPolicy.encoder(), "'ValueSerial' encoder can not be null");
-        remoteConfig.setKeySerialName(serialPolicy.name());
+        namespaceConfig.setKeySerialName(serialPolicy.name());
         return (T) this;
     }
 
@@ -36,7 +36,7 @@ public abstract class ExternalCacheBuilder<T extends ExternalCacheBuilder<T>>
         InnerAssertUtils.notNull(serialPolicy, "'ValueWrapperSerial' can not be null");
         InnerAssertUtils.notNull(serialPolicy.decoder(), "'ValueWrapperSerial' decoder can not be null");
         InnerAssertUtils.notNull(serialPolicy.encoder(), "'ValueWrapperSerial' encoder can not be null");
-        remoteConfig.setValueWrapperSerialName(serialPolicy.name());
+        namespaceConfig.setValueWrapperSerialName(serialPolicy.name());
         return (T) this;
     }
 
@@ -44,22 +44,22 @@ public abstract class ExternalCacheBuilder<T extends ExternalCacheBuilder<T>>
         InnerAssertUtils.notNull(serialPolicy, "'ValueCompressSerial' can not be null");
         InnerAssertUtils.notNull(serialPolicy.decoder(), "'ValueCompressSerial' decoder can not be null");
         InnerAssertUtils.notNull(serialPolicy.encoder(), "'ValueCompressSerial' encoder can not be null");
-        remoteConfig.setValueCompressSerialName(serialPolicy.name());
+        namespaceConfig.setValueCompressSerialName(serialPolicy.name());
         return (T) this;
     }
 
     @Override
     public void preBuild() {
         super.preBuild();
-        String namespace = remoteConfig.getNamespace();
+        String namespace = namespaceConfig.getNamespace();
 
         // 添加 拦截器
         // 编解码器
-        addFilters(new CodecFilter(remoteConfig));
+        addFilters(new CodecFilter(namespaceConfig.getRemote()));
         // 大key检测器
-        addFilters(new BigKeyCheckFilter(remoteConfig.getParent().getParent().getBigKey(), namespace));
+        addFilters(new BigKeyCheckFilter(namespaceConfig.getParent().getBigKey(), namespace));
         // 熔断器
-        addFilters(new CircuitBreakerFilter(remoteConfig.getParent().getParent(), namespace));
+        addFilters(new CircuitBreakerFilter(namespaceConfig.getParent(), namespace));
         // 删除失败补偿器
         addFilters(new FailCompensateFilter(namespace));
     }

@@ -18,7 +18,7 @@ public class JedisCacheBuilder extends ExternalCacheBuilder<JedisCacheBuilder> {
 
     @Override
     public CacheClient buildCache() {
-        JedisCache cache = new JedisCache(remoteConfig);
+        JedisCache cache = new JedisCache(namespaceConfig.getRemote());
         addTailFilter(cache);
         return createCacheProxy(cache);
     }

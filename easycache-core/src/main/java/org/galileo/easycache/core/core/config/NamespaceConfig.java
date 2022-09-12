@@ -1,6 +1,6 @@
 package org.galileo.easycache.core.core.config;
 
-import org.galileo.easycache.common.constants.CacheConstants;
+import org.galileo.easycache.common.enums.CacheType;
 
 /**
  * 缓存实例配置
@@ -9,28 +9,19 @@ import org.galileo.easycache.common.constants.CacheConstants;
 public class NamespaceConfig extends InheritableConfig<EasyCacheConfig> {
 
     /**
-     * 当前namespace名
-     */
-    private String namespace = CacheConstants.DEFAULT_NAMESPACE;
-
-    /**
      * 缓存组件类型
      */
-    private String type;
+    private String type = CacheType.LOCAL.getVal();
 
     /**
      * 本地缓存配置
      */
     private InternalConfig local = new InternalConfig();
+
+    /**
+     * 远程缓存配置
+     */
     private RemoteConfig remote = new RemoteConfig();
-
-    public String getNamespace() {
-        return namespace;
-    }
-
-    public void setNamespace(String namespace) {
-        this.namespace = namespace;
-    }
 
     public String getType() {
         return type;

@@ -10,6 +10,7 @@ import org.galileo.easycache.common.enums.CacheType;
 import org.galileo.easycache.core.core.*;
 import org.galileo.easycache.core.core.config.EasyCacheConfig;
 import org.galileo.easycache.core.core.config.InternalConfig;
+import org.galileo.easycache.core.core.config.NamespaceConfig;
 import org.galileo.easycache.core.core.config.RemoteConfig;
 import org.galileo.easycache.springboot.springdata.SpringDataRedisCacheBuilder;
 import org.slf4j.Logger;
@@ -48,7 +49,7 @@ public class RegisterNamespaceListener
                 if (nsConfig.getType().equals(CacheType.REMOTE.getVal()) || nsConfig.getType().equals(CacheType.BOTH.getVal())) {
                     CacheClient localCache = registerInternalCache(cacheBeanName + SubNamespace.LOCAL_POSTFIX, nsConfig.getLocal(), applicationContext);
                     CacheClient remoteCache = registerExternalCache(cacheBeanName + SubNamespace.REMOTE_POSTFIX, nsConfig.getRemote(), applicationContext);
-                    registerCombinationCache(cacheBeanName, nsConfig.getRemote(), localCache, remoteCache, applicationContext);
+                    registerCombinationCache(cacheBeanName, nsConfig, localCache, remoteCache, applicationContext);
                 }
                 if (nsConfig.getType().equals(CacheType.LOCAL.getVal())) {
                     CacheClient localCache = registerInternalCache(cacheBeanName + SubNamespace.LOCAL_POSTFIX, nsConfig.getLocal(), applicationContext);
@@ -124,7 +125,7 @@ public class RegisterNamespaceListener
         throw new IllegalArgumentException("cache Local 配置有误");
     }
 
-    private CacheClient registerCombinationCache(String namespace, RemoteConfig remoteConfig, CacheClient local, CacheClient remote, ConfigurableApplicationContext applicationContext) {
+    private CacheClient registerCombinationCache(String namespace, NamespaceConfig namespaceConfig, CacheClient local, CacheClient remote, ConfigurableApplicationContext applicationContext) {
         CacheClient cacheClient = checkCacheBean(namespace, applicationContext);
         if (cacheClient != null) {
             return cacheClient;
@@ -135,7 +136,7 @@ public class RegisterNamespaceListener
         }
         CacheProxy localProxy = (CacheProxy) local;
         CacheProxy remoteProxy = (CacheProxy) remote;
-        CacheClient autoCache = AutoCacheBuilder.createBuilder(remoteConfig, localProxy, remoteProxy).buildCache();
+        CacheClient autoCache = AutoCacheBuilder.createBuilder(namespaceConfig, localProxy, remoteProxy).buildCache();
         CacheProxy autoCacheProxy = (CacheProxy) autoCache;
         applicationContext.getBeanFactory().registerSingleton(namespace, autoCache);
         EasyCacheManager.addCache(namespace, autoCacheProxy);

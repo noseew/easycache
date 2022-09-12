@@ -16,7 +16,7 @@ public class CaffeineCacheBuilder extends InternalCacheBuilder {
     private InternalConfig caffeineConfig;
 
     private CaffeineCacheBuilder(InternalConfig internalConfig) {
-        super(null, internalConfig);
+        super(internalConfig);
         this.caffeineConfig = internalConfig;
         this.maximumSize = caffeineConfig.getMaximumSize();
         this.expireAfterWrite = caffeineConfig.getExpireAfterWrite();

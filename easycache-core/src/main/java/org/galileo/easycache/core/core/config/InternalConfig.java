@@ -6,7 +6,7 @@ import org.galileo.easycache.common.enums.CacheInternalType;
 
 import java.time.Duration;
 
-public class InternalConfig {
+public class InternalConfig extends InheritableConfig<NamespaceConfig> {
 
     /**
      * 缓存类型
