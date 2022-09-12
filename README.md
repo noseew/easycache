@@ -80,3 +80,16 @@ UserDO userDO1 = EasyCacheUtils.get(namespace, cacheName, key, UserDO.class);
 
 
 更多支持开发中..., 欢迎参与建设
+
+
+# 打包
+
+```
+# 打包
+mvn package -Dmaven.test.skip=true
+
+# 安装到仓库
+mvn install -Dmaven.test.skip=true
+
+```
+
