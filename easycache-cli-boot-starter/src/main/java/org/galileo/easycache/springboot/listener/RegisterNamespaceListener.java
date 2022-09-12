@@ -6,10 +6,13 @@ import org.galileo.easycache.common.constants.CacheConstants;
 import org.galileo.easycache.common.constants.SubNamespace;
 import org.galileo.easycache.common.enums.CacheExternalType;
 import org.galileo.easycache.common.enums.CacheInternalType;
+import org.galileo.easycache.common.enums.CacheTagType;
+import org.galileo.easycache.common.enums.CacheType;
 import org.galileo.easycache.core.core.*;
 import org.galileo.easycache.core.core.config.InternalConfig;
 import org.galileo.easycache.core.core.config.NamespaceConfig;
 import org.galileo.easycache.core.core.config.EasyCacheConfig;
+import org.galileo.easycache.core.core.config.RemoteConfig;
 import org.galileo.easycache.springboot.springdata.SpringDataRedisCacheBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,30 +41,36 @@ public class RegisterNamespaceListener
                 return;
             }
             EasyCacheConfig cacheConfig = applicationContext.getBean(EasyCacheConfig.class);
-            String localCacheBeanName = CacheConstants.cacheBeanName(CacheConstants.DEFAULT_NAMESPACE);
-            CacheClient localCache = registerInternalCache(localCacheBeanName + SubNamespace.LOCAL_POSTFIX, cacheConfig, applicationContext);
+            cacheConfig.getNs().forEach((ns, nsConfig) -> {
+                if (nsConfig.getType().equals(CacheType.REMOTE.getVal()) || nsConfig.getType().equals(CacheType.BOTH.getVal())) {
+                    String localCacheBeanName = CacheConstants.cacheBeanName(CacheConstants.DEFAULT_NAMESPACE);
+                    CacheClient localCache = registerInternalCache(localCacheBeanName + SubNamespace.LOCAL_POSTFIX, cacheConfig, applicationContext);
 
-            cacheConfig.getRemote().forEach((ns, nsConfig) -> {
-                String cacheBeanName = CacheConstants.cacheBeanName(ns);
-                CacheClient remoteCache = registerExternalCache(cacheBeanName + SubNamespace.REMOTE_POSTFIX, nsConfig, applicationContext);
-                registerCombinationCache(cacheBeanName, nsConfig, localCache, remoteCache, applicationContext);
+                    String cacheBeanName = CacheConstants.cacheBeanName(ns);
+                    CacheClient remoteCache = registerExternalCache(cacheBeanName + SubNamespace.REMOTE_POSTFIX, nsConfig.getRemote(), applicationContext);
+                    registerCombinationCache(cacheBeanName, nsConfig.getRemote(), localCache, remoteCache, applicationContext);
+                }
+                if (nsConfig.getType().equals(CacheType.LOCAL.getVal())) {
+                    String localCacheBeanName = CacheConstants.cacheBeanName(CacheConstants.DEFAULT_NAMESPACE);
+                    CacheClient localCache = registerInternalCache(localCacheBeanName + SubNamespace.LOCAL_POSTFIX, cacheConfig, applicationContext);
+                }
             });
         } catch (Exception e) {
             logger.error("EasyCache RegisterNamespaceListener error", e);
         }
     }
 
-    private CacheClient registerExternalCache(String namespace, NamespaceConfig nsconfig, ConfigurableApplicationContext applicationContext) {
-        if (nsconfig == null) {
-            throw new IllegalArgumentException("nsconfig 配置为空");
+    private CacheClient registerExternalCache(String namespace, RemoteConfig remoteConfig, ConfigurableApplicationContext applicationContext) {
+        if (remoteConfig == null) {
+            throw new IllegalArgumentException("remoteConfig 配置为空");
         }
         CacheClient cacheClient = checkCacheBean(namespace, applicationContext);
         if (cacheClient != null) {
             return cacheClient;
         }
-        String externalType = nsconfig.getType();
+        String externalType = remoteConfig.getType();
         if (CacheExternalType.REDIS.eq(externalType)) {
-            JedisCacheBuilder jedisCacheBuilder = JedisCacheBuilder.createBuilder(nsconfig);
+            JedisCacheBuilder jedisCacheBuilder = JedisCacheBuilder.createBuilder(remoteConfig);
             CacheClient jedisCacheClient = jedisCacheBuilder.buildCache();
             ConfigurableListableBeanFactory beanFactory = applicationContext.getBeanFactory();
             beanFactory.registerSingleton(namespace, jedisCacheClient);
@@ -82,7 +91,7 @@ public class RegisterNamespaceListener
                 throw new IllegalArgumentException("redis 配置bean不存在 " + redisBeanName);
             }
             RedisProperties redisProperties = (RedisProperties) applicationContext.getBean(redisBeanName);
-            CacheClient springDataCache = SpringDataRedisCacheBuilder.createBuilder(nsconfig, redisProperties)
+            CacheClient springDataCache = SpringDataRedisCacheBuilder.createBuilder(remoteConfig, redisProperties)
                     .buildCache();
             ConfigurableListableBeanFactory beanFactory = applicationContext.getBeanFactory();
             beanFactory.registerSingleton(namespace, springDataCache);
@@ -117,7 +126,7 @@ public class RegisterNamespaceListener
         throw new IllegalArgumentException("cache Local 配置有误");
     }
 
-    private CacheClient registerCombinationCache(String namespace, NamespaceConfig nsconfig, CacheClient local, CacheClient remote, ConfigurableApplicationContext applicationContext) {
+    private CacheClient registerCombinationCache(String namespace, RemoteConfig remoteConfig, CacheClient local, CacheClient remote, ConfigurableApplicationContext applicationContext) {
         CacheClient cacheClient = checkCacheBean(namespace, applicationContext);
         if (cacheClient != null) {
             return cacheClient;
@@ -128,7 +137,7 @@ public class RegisterNamespaceListener
         }
         CacheProxy localProxy = (CacheProxy) local;
         CacheProxy remoteProxy = (CacheProxy) remote;
-        CacheClient autoCache = AutoCacheBuilder.createBuilder(nsconfig, localProxy, remoteProxy).buildCache();
+        CacheClient autoCache = AutoCacheBuilder.createBuilder(remoteConfig, localProxy, remoteProxy).buildCache();
         CacheProxy autoCacheProxy = (CacheProxy) autoCache;
         applicationContext.getBeanFactory().registerSingleton(namespace, autoCache);
         EasyCacheManager.addCache(namespace, autoCacheProxy);

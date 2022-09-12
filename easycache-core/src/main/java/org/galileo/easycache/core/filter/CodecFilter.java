@@ -6,7 +6,7 @@ import org.galileo.easycache.common.ValWrapper;
 import org.galileo.easycache.common.enums.CacheType;
 import org.galileo.easycache.common.enums.OpType;
 import org.galileo.easycache.core.core.EasyCacheManager;
-import org.galileo.easycache.core.core.config.NamespaceConfig;
+import org.galileo.easycache.core.core.config.RemoteConfig;
 import org.galileo.easycache.core.utils.InnerCodecUtils;
 
 /**
@@ -16,15 +16,15 @@ public class CodecFilter extends AbsInvokeFilter {
 
     private final SerialPolicy valueCompressSerial;
     private final SerialPolicy valueSerial;
-    private final NamespaceConfig config;
+    private final RemoteConfig remoteConfig;
 
-    public CodecFilter(NamespaceConfig config) {
-        super("CodecFilter", config.getNamespace(), null);
-        this.config = config;
-        valueCompressSerial = EasyCacheManager.getSerialPolicy(config.getValueCompressSerialName(), EasyCacheManager
+    public CodecFilter(RemoteConfig remoteConfig) {
+        super("CodecFilter", remoteConfig.getNamespace(), null);
+        this.remoteConfig = remoteConfig;
+        valueCompressSerial = EasyCacheManager.getSerialPolicy(remoteConfig.getValueCompressSerialName(), EasyCacheManager
                 .getSerialPolicy(SerialPolicy.Gzip, null));
         valueSerial = EasyCacheManager
-                .getSerialPolicy(config.getValueSerialName(), EasyCacheManager.getSerialPolicy(SerialPolicy.Jackson, null));
+                .getSerialPolicy(remoteConfig.getValueSerialName(), EasyCacheManager.getSerialPolicy(SerialPolicy.Jackson, null));
     }
 
     @Override
@@ -32,7 +32,7 @@ public class CodecFilter extends AbsInvokeFilter {
         boolean needCodec = CacheType.REMOTE.equals(getTarget().getCacheType());
         ValWrapper valWrapper = context.getValWrapper();
         if (needCodec && OpType.PUT.equals(context.getOpType()) && valWrapper != null) {
-            valWrapper.setValue(InnerCodecUtils.serialVal(valWrapper, this.valueSerial, this.valueCompressSerial, config.getCompressThreshold()));
+            valWrapper.setValue(InnerCodecUtils.serialVal(valWrapper, this.valueSerial, this.valueCompressSerial, remoteConfig.getCompressThreshold()));
         }
         Object invoke = super.invoke(context);
         if (needCodec && OpType.GET.equals(context.getOpType()) && (valWrapper = context.getValWrapper()) != null) {

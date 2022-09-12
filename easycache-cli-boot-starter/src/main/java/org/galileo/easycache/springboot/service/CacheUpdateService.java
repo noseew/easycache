@@ -24,7 +24,7 @@ public class CacheUpdateService extends AbsCacheService {
         String dynaKey = getDynaKey(cacheUpdate.keyPolicy(), target, method, args);
         String fullKey = buildFullKey(namespace, cacheName, dynaKey);
 
-        if (easyCacheConfig.getRemote().get(namespace) == null) {
+        if (easyCacheConfig.getNs().get(namespace) == null) {
             logger.warn("EasyCache 'namespace' 配置不存在 {}", namespace);
             return invocation.proceed();
         }

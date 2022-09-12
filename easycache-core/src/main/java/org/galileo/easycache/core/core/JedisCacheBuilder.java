@@ -1,24 +1,24 @@
 package org.galileo.easycache.core.core;
 
 import org.galileo.easycache.common.CacheClient;
-import org.galileo.easycache.core.core.config.NamespaceConfig;
+import org.galileo.easycache.core.core.config.RemoteConfig;
 
 /**
  */
 public class JedisCacheBuilder extends ExternalCacheBuilder<JedisCacheBuilder> {
 
 
-    public JedisCacheBuilder(NamespaceConfig namespaceConfig) {
-        super(namespaceConfig);
+    public JedisCacheBuilder(RemoteConfig remoteConfig) {
+        super(remoteConfig);
     }
 
-    public static JedisCacheBuilder createBuilder(NamespaceConfig namespaceConfig) {
+    public static JedisCacheBuilder createBuilder(RemoteConfig namespaceConfig) {
         return new JedisCacheBuilder(namespaceConfig);
     }
 
     @Override
     public CacheClient buildCache() {
-        JedisCache cache = new JedisCache(namespaceConfig);
+        JedisCache cache = new JedisCache(remoteConfig);
         addTailFilter(cache);
         return createCacheProxy(cache);
     }

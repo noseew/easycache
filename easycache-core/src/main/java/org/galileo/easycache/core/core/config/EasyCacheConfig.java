@@ -71,7 +71,7 @@ public class EasyCacheConfig extends InheritableConfig<EasyCacheConfig> {
     /**
      * 远程缓存配置
      */
-    private Map<String, NamespaceConfig> remote = new HashMap<>();
+    private Map<String, NamespaceConfig> ns = new HashMap<>();
     /**
      * 本地缓存配置
      */
@@ -163,12 +163,12 @@ public class EasyCacheConfig extends InheritableConfig<EasyCacheConfig> {
         this.trafficTag = trafficTag;
     }
 
-    public Map<String, NamespaceConfig> getRemote() {
-        return remote;
+    public Map<String, NamespaceConfig> getNs() {
+        return ns;
     }
 
-    public void setRemote(Map<String, NamespaceConfig> remote) {
-        this.remote = remote;
+    public void setNs(Map<String, NamespaceConfig> ns) {
+        this.ns = ns;
     }
 
     @Override

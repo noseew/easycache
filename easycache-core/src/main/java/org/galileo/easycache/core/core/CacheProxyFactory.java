@@ -6,6 +6,7 @@ import org.galileo.easycache.common.enums.CacheTagType;
 import org.galileo.easycache.common.enums.CacheType;
 import org.galileo.easycache.common.enums.OpType;
 import org.galileo.easycache.core.core.config.NamespaceConfig;
+import org.galileo.easycache.core.core.config.RemoteConfig;
 import org.galileo.easycache.core.filter.AbsInvokeFilter;
 import org.galileo.easycache.core.filter.FilterContext;
 import org.galileo.easycache.core.utils.InnerKeyUtils;
@@ -77,7 +78,7 @@ public class CacheProxyFactory {
 
                                 // Redis 客户端操作
                                 if (target.getCacheType() == CacheType.REMOTE && opType.isRedisCollection()) {
-                                    NamespaceConfig namespaceConfig = ((AbsExternalCache) target.unProxy()).config;
+                                    RemoteConfig namespaceConfig = ((AbsExternalCache) target.unProxy()).remoteConfig;
                                     String cacheName = args[0].toString();
                                     CacheTagType cacheTagType = opType.isSet() ? CacheTagType.SET : CacheTagType.ZSET;
                                     args[0] = InnerKeyUtils.buildFullKey(namespaceConfig, cacheTagType, cacheName);
@@ -122,7 +123,7 @@ public class CacheProxyFactory {
             keys = (Set) args[0];
         }
 
-        FilterContext context = new FilterContext(target, ((AbsCache) target).config, key, keys, filterProxy.opType(), method, args);
+        FilterContext context = new FilterContext(target, ((AbsCache) target).remoteConfig, key, keys, filterProxy.opType(), method, args);
         if (filterProxy.hasValParam()) {
             Parameter[] parameters = method.getParameters();
             for (int i = 0; i < args.length; i++) {

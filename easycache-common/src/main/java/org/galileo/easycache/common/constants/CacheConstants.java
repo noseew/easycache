@@ -1,6 +1,5 @@
 package org.galileo.easycache.common.constants;
 
-import org.galileo.easycache.common.enums.CacheType;
 import org.galileo.easycache.common.enums.ReportPositionType;
 
 /**
@@ -22,7 +21,6 @@ public interface CacheConstants {
     String CACHE_CONFIG = "easyCacheConfig";
     String CACHE_BEAN_NAME = "easyCache";
 
-    CacheType DEFAULT_CACHE_TYPE = CacheType.REMOTE;
     boolean DEFAULT_LOCAL_ENABLED = false;
     int DEFAULT_LOCAL_EXPIRE_FALLBACK = 1000 * 60 * 3;
     int DEFAULT_LOCAL_EXPIRE = 1000 * 3;

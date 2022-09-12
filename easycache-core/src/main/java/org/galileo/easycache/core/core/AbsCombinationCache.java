@@ -4,6 +4,7 @@ import org.galileo.easycache.common.*;
 import org.galileo.easycache.common.enums.CacheType;
 import org.galileo.easycache.common.enums.OpType;
 import org.galileo.easycache.core.core.config.NamespaceConfig;
+import org.galileo.easycache.core.core.config.RemoteConfig;
 import org.galileo.easycache.core.utils.InnerAssertUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,8 +28,8 @@ public abstract class AbsCombinationCache extends AbsCache {
     protected AbsInternalCache internalCache;
     protected boolean ignoreDisabled = true;
 
-    protected AbsCombinationCache(NamespaceConfig config, CacheProxy... multiCache) {
-        super(config, CacheType.BOTH);
+    protected AbsCombinationCache(RemoteConfig remoteConfig, CacheProxy... multiCache) {
+        super(remoteConfig, CacheType.BOTH);
         InnerAssertUtils.isTrue(multiCache != null && multiCache.length > 0, "'multiCache' must be have value");
         this.multiCache = Arrays.stream(multiCache).filter(Objects::nonNull).collect(Collectors.toList());
         this.inValidCache = new CopyOnWriteArrayList<>(new CacheStatus[this.multiCache.size()]);
@@ -64,7 +65,7 @@ public abstract class AbsCombinationCache extends AbsCache {
             hitCache = multiCache.get(hitIndex);
             valWrapper = hitCache.get(key);
             if (valWrapper != null) {
-                if (config.getParent().isDebug()) {
+                if (remoteConfig.getParent().isDebug()) {
                     logger.debug("EasyCache 多级缓存命中 {} 级, key = {}", hitIndex, key);
                 }
                 break;
@@ -165,7 +166,7 @@ public abstract class AbsCombinationCache extends AbsCache {
     }
 
     protected boolean enableLocal() {
-        return config.getParent().getLocal().isEnabled();
+        return remoteConfig.getParent().getLocal().isEnabled();
     }
 
     protected boolean validCache(int currentIndex) {

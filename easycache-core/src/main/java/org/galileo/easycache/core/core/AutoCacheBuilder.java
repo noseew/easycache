@@ -5,6 +5,7 @@ import org.galileo.easycache.common.CacheClient;
 import org.galileo.easycache.common.CacheProxy;
 import org.galileo.easycache.core.core.config.CacheReporterConfig;
 import org.galileo.easycache.core.core.config.NamespaceConfig;
+import org.galileo.easycache.core.core.config.RemoteConfig;
 import org.galileo.easycache.core.event.CacheOpEventPublisher;
 import org.galileo.easycache.core.filter.RedisCacheManagerListener;
 
@@ -20,26 +21,26 @@ public class AutoCacheBuilder extends AbstractCacheBuilder<AutoCacheBuilder> {
     private final CacheProxy remote;
 
 
-    private AutoCacheBuilder(NamespaceConfig namespaceConfig, CacheProxy local, CacheProxy remote) {
-        super(namespaceConfig);
+    private AutoCacheBuilder(RemoteConfig remoteConfig, CacheProxy local, CacheProxy remote) {
+        super(remoteConfig);
         this.local = local;
         this.remote = remote;
     }
 
-    public static AutoCacheBuilder createBuilder(NamespaceConfig namespaceConfig, CacheProxy local, CacheProxy remote) {
-        return new AutoCacheBuilder(namespaceConfig, local, remote);
+    public static AutoCacheBuilder createBuilder(RemoteConfig remoteConfig, CacheProxy local, CacheProxy remote) {
+        return new AutoCacheBuilder(remoteConfig, local, remote);
     }
 
     @Override
     public CacheClient buildCache() {
-        AutoCache cache = new AutoCache(namespaceConfig, local, remote);
+        AutoCache cache = new AutoCache(remoteConfig, local, remote);
         addHeadFilter(cache);
         return createCacheProxy(cache);
     }
 
     @Override
     protected void preBuild() {
-        String namespace = namespaceConfig.getNamespace();
+        String namespace = remoteConfig.getNamespace();
         // 添加 拦截器
         // 事件发布器
         CacheOpEventPublisher cacheOpEventPublisher = new CacheOpEventPublisher(namespace);
@@ -52,7 +53,7 @@ public class AutoCacheBuilder extends AbstractCacheBuilder<AutoCacheBuilder> {
         cacheOpEventPublisher.setExecutor(executor);
 
         // 添加事件监听器, 缓存key管理监听
-        CacheReporterConfig cacheReporter = namespaceConfig.getParent().getCacheReporter();
+        CacheReporterConfig cacheReporter = remoteConfig.getParent().getCacheReporter();
         if (cacheReporter != null && cacheReporter.isEnabled()) {
             RedisCacheManagerListener cacheManagerListener = new RedisCacheManagerListener();
             EasyCacheManager.addEventListener(cacheManagerListener);

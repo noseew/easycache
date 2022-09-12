@@ -3,6 +3,7 @@ package org.galileo.easycache.core.core;
 import org.galileo.easycache.common.SerialPolicy;
 import org.galileo.easycache.core.core.config.NamespaceConfig;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+import org.galileo.easycache.core.core.config.RemoteConfig;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPubSub;
@@ -19,8 +20,8 @@ public class JedisCache extends AbsExternalCache {
 
     private final Map<String, UJedisPubSub> subed = new ConcurrentHashMap<>();
 
-    public JedisCache(NamespaceConfig config) {
-        super(config);
+    public JedisCache(RemoteConfig remoteConfig) {
+        super(remoteConfig);
         this.cacheClientName = "JedisCache";
     }
 
@@ -108,7 +109,7 @@ public class JedisCache extends AbsExternalCache {
 
     private synchronized void initPool() {
         GenericObjectPoolConfig poolConfig =  new GenericObjectPoolConfig<>();
-        NamespaceConfig.Pool pool = config.getJedis().getPool();
+        RemoteConfig.Pool pool = remoteConfig.getJedis().getPool();
         poolConfig.setMaxIdle(pool.getMaxIdle());
         poolConfig.setMinIdle(pool.getMinIdle());
         poolConfig.setMaxTotal(pool.getMaxActive());
@@ -118,7 +119,7 @@ public class JedisCache extends AbsExternalCache {
         // 向资源池归还连接时是否做连接有效性检测（ping）。检测到无效连接将会被移除。
 //        poolConfig.setTestOnReturn(true);
         
-        jedisPool = new JedisPool(poolConfig, config.getHost(), config.getPort());
+        jedisPool = new JedisPool(poolConfig, remoteConfig.getHost(), remoteConfig.getPort());
     }
 
     @Override

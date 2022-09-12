@@ -4,14 +4,15 @@ package org.galileo.easycache.core.core;
 import org.galileo.easycache.common.CacheClient;
 import org.galileo.easycache.common.CacheProxy;
 import org.galileo.easycache.core.core.config.NamespaceConfig;
+import org.galileo.easycache.core.core.config.RemoteConfig;
 
 /**
  * 默认多级缓存, 可通过配置控制细节
  */
 public class AutoCache extends AbsCombinationCache {
 
-    public AutoCache(NamespaceConfig config, CacheClient localCache, CacheClient remoteCache) {
-        super(config, (CacheProxy) localCache, (CacheProxy) remoteCache);
+    public AutoCache(RemoteConfig remoteConfig, CacheClient localCache, CacheClient remoteCache) {
+        super(remoteConfig, (CacheProxy) localCache, (CacheProxy) remoteCache);
         this.cacheClientName = "AutoCache";
     }
 

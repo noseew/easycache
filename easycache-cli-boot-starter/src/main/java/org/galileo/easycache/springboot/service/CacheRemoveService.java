@@ -24,7 +24,7 @@ public class CacheRemoveService extends AbsCacheService {
         Set<String> dynaKeys = getDynaKeys(cacheRemove.keyPolicy(), target, method, args);
         Set<String> fullKeys = buildFullKeys(namespace, cacheName, dynaKeys);
 
-        if (easyCacheConfig.getRemote().get(namespace) == null) {
+        if (easyCacheConfig.getNs().get(namespace) == null) {
             logger.warn("EasyCache 'namespace' 配置不存在 {}", namespace);
             return invocation.proceed();
         }

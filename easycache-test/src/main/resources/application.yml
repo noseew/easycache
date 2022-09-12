@@ -116,14 +116,19 @@ easycache: # 第一级
   batchPubTime: 3s
   circuitBreaker: # 防雪崩, 熔断降级
     enabled: false
-  local: # 公用本地缓存
-    enabled: true # 开启后动态生效
-    type: caffeine
-    maximumSize: 5000
-    expireAfterWrite: 6000
   remote: # 远程缓存
     dft: # 动态 namespace
       type: redis#spring.redis-org.springframework.boot.autoconfigure.data.redis.RedisProperties
+      local: # 公用本地缓存
+        enabled: true # 开启后动态生效
+        type: caffeine
+        maximumSize: 5000
+        expireAfterWrite: 6000
     game: # 动态  其他namespace
       type: redis#spring.redis-org.springframework.boot.autoconfigure.data.redis.RedisProperties
+      local: # 公用本地缓存
+        enabled: true # 开启后动态生效
+        type: caffeine
+        maximumSize: 5000
+        expireAfterWrite: 6000
 

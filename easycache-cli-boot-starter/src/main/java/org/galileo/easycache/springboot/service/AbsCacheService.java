@@ -153,7 +153,7 @@ public abstract class AbsCacheService implements ApplicationContextAware {
 
     public String getNamespace(String namespace) {
         try {
-            Map<String, NamespaceConfig> namespaceConfigMap = easyCacheConfig.getRemote();
+            Map<String, NamespaceConfig> namespaceConfigMap = easyCacheConfig.getNs();
             if (CacheConstants.DEFAULT_NAMESPACE.equals(namespace)
                     && namespaceConfigMap.size() == 1) {
                 return namespaceConfigMap.keySet().iterator().next();
@@ -212,8 +212,8 @@ public abstract class AbsCacheService implements ApplicationContextAware {
             return expireByPolicy;
         }
         long expire = -1;
-        NamespaceConfig namespaceConfig = easyCacheConfig.getRemote().get(namespace);
-        CacheNameConfig cacheNameConfig = namespaceConfig.getCacheName().get(cacheName);
+        NamespaceConfig namespaceConfig = easyCacheConfig.getNs().get(namespace);
+        CacheNameConfig cacheNameConfig = namespaceConfig.getRemote().getCacheName().get(cacheName);
         if (cacheNameConfig != null) {
             KeyConfig keyConfig = cacheNameConfig.getKey().get(dynaKey);
             if (keyConfig != null) {

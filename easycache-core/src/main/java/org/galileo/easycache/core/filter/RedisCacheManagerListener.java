@@ -3,6 +3,7 @@ package org.galileo.easycache.core.filter;
 import com.google.common.collect.Sets;
 import org.galileo.easycache.core.core.AbsCache;
 import org.galileo.easycache.core.core.config.NamespaceConfig;
+import org.galileo.easycache.core.core.config.RemoteConfig;
 import org.galileo.easycache.core.event.AbsCacheOpEventListener;
 import org.galileo.easycache.core.event.CachePutEvent;
 import org.galileo.easycache.core.event.CacheRemoveEvent;
@@ -16,8 +17,8 @@ import java.util.Set;
 
 public class RedisCacheManagerListener extends AbsCacheOpEventListener {
 
-    private NamespaceConfig getRedisConfig(AbsCache cache) {
-        return cache.getConfig();
+    private RemoteConfig getRedisConfig(AbsCache cache) {
+        return cache.getRemoteConfig();
     }
 
     @Override

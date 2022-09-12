@@ -3,6 +3,7 @@ package org.galileo.easycache.springboot.springdata;
 import org.galileo.easycache.common.CacheClient;
 import org.galileo.easycache.core.core.ExternalCacheBuilder;
 import org.galileo.easycache.core.core.config.NamespaceConfig;
+import org.galileo.easycache.core.core.config.RemoteConfig;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -16,14 +17,14 @@ public class SpringDataRedisCacheBuilder extends ExternalCacheBuilder<SpringData
     private RedisConnectionFactory connectionFactory;
     private final RedisProperties redisProperties;
 
-    public SpringDataRedisCacheBuilder(NamespaceConfig namespaceConfig, RedisProperties redisProperties) {
-        super(namespaceConfig);
+    public SpringDataRedisCacheBuilder(RemoteConfig remoteConfig, RedisProperties redisProperties) {
+        super(remoteConfig);
         this.redisProperties = redisProperties;
     }
 
-    public static SpringDataRedisCacheBuilder createBuilder(NamespaceConfig namespaceConfig,
-            RedisProperties redisProperties) {
-        return new SpringDataRedisCacheBuilder(namespaceConfig, redisProperties);
+    public static SpringDataRedisCacheBuilder createBuilder(RemoteConfig remoteConfig,
+                                                            RedisProperties redisProperties) {
+        return new SpringDataRedisCacheBuilder(remoteConfig, redisProperties);
     }
 
     public SpringDataRedisCacheBuilder redisConnectionFactory(RedisConnectionFactory connectionFactory) {
@@ -49,7 +50,7 @@ public class SpringDataRedisCacheBuilder extends ExternalCacheBuilder<SpringData
         redisTemplate.setHashKeySerializer(RedisSerializer.string());
         redisTemplate.setHashValueSerializer(RedisSerializer.json());
 
-        SpringDataCache cache = new SpringDataCache(namespaceConfig, redisTemplate);
+        SpringDataCache cache = new SpringDataCache(remoteConfig, redisTemplate);
         addTailFilter(cache);
         return createCacheProxy(cache);
     }

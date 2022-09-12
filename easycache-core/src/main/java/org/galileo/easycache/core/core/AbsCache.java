@@ -6,6 +6,7 @@ import org.galileo.easycache.common.CacheProxy;
 import org.galileo.easycache.common.Filter;
 import org.galileo.easycache.common.enums.CacheType;
 import org.galileo.easycache.core.core.config.NamespaceConfig;
+import org.galileo.easycache.core.core.config.RemoteConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +22,7 @@ public abstract class AbsCache implements CacheProxy, CacheInit {
     /**
      * 缓存实例对应的配置
      */
-    protected NamespaceConfig config;
+    protected RemoteConfig remoteConfig;
     protected CacheType cacheType;
     protected CacheLock cacheLock;
     protected String cacheClientName;
@@ -31,13 +32,13 @@ public abstract class AbsCache implements CacheProxy, CacheInit {
 
     protected AtomicBoolean closed = new AtomicBoolean(false);
 
-    protected AbsCache(NamespaceConfig config, CacheType cacheType) {
-        this.config = config;
+    protected AbsCache(RemoteConfig remoteConfig, CacheType cacheType) {
+        this.remoteConfig = remoteConfig;
         this.cacheType = cacheType;
     }
 
-    public NamespaceConfig getConfig() {
-        return this.config;
+    public RemoteConfig getRemoteConfig() {
+        return this.remoteConfig;
     }
 
     @Override

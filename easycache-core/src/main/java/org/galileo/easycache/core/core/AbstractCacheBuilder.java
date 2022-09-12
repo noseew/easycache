@@ -3,8 +3,8 @@ package org.galileo.easycache.core.core;
 
 import org.galileo.easycache.common.CacheBuilder;
 import org.galileo.easycache.common.CacheProxy;
-import org.galileo.easycache.core.core.config.NamespaceConfig;
 import org.apache.commons.lang3.StringUtils;
+import org.galileo.easycache.core.core.config.RemoteConfig;
 import org.galileo.easycache.core.filter.AbsInvokeFilter;
 import org.galileo.easycache.core.filter.HeadFilter;
 import org.galileo.easycache.core.filter.TailFilter;
@@ -19,7 +19,7 @@ import java.util.List;
  */
 public abstract class AbstractCacheBuilder<T extends AbstractCacheBuilder<T>> implements CacheBuilder, Cloneable {
 
-    protected NamespaceConfig namespaceConfig;
+    protected RemoteConfig remoteConfig;
 
     private final List<AbsInvokeFilter> cacheFilterList = new ArrayList<>();
     /**
@@ -31,14 +31,14 @@ public abstract class AbstractCacheBuilder<T extends AbstractCacheBuilder<T>> im
      */
     protected AbsInvokeFilter last;
 
-    protected AbstractCacheBuilder(NamespaceConfig namespaceConfig) {
-        this.namespaceConfig = namespaceConfig;
+    protected AbstractCacheBuilder(RemoteConfig remoteConfig) {
+        this.remoteConfig = remoteConfig;
     }
 
     public T addFilters(AbsInvokeFilter... filters) {
         for (AbsInvokeFilter filter : filters) {
-            if (StringUtils.isEmpty(filter.getForNamespace()) && namespaceConfig != null) {
-                filter.setForNamespace(namespaceConfig.getNamespace());
+            if (StringUtils.isEmpty(filter.getForNamespace()) && remoteConfig != null) {
+                filter.setForNamespace(remoteConfig.getNamespace());
             }
             cacheFilterList.add(filter);
         }
@@ -47,15 +47,15 @@ public abstract class AbstractCacheBuilder<T extends AbstractCacheBuilder<T>> im
 
     protected void addHeadFilter(CacheProxy cache) {
         this.first = new HeadFilter(cache);
-        if (namespaceConfig != null) {
-            first.setForNamespace(namespaceConfig.getNamespace());
+        if (remoteConfig != null) {
+            first.setForNamespace(remoteConfig.getNamespace());
         }
     }
 
     protected void addTailFilter(CacheProxy cache) {
         this.last = new TailFilter(cache);
-        if (namespaceConfig != null) {
-            last.setForNamespace(namespaceConfig.getNamespace());
+        if (remoteConfig != null) {
+            last.setForNamespace(remoteConfig.getNamespace());
         }
     }
 

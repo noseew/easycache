@@ -2,6 +2,7 @@ package org.galileo.easycache.springboot.springdata;
 
 import org.galileo.easycache.core.core.AbsExternalCache;
 import org.galileo.easycache.core.core.config.NamespaceConfig;
+import org.galileo.easycache.core.core.config.RemoteConfig;
 import org.galileo.easycache.core.utils.InnerCodecUtils;
 import org.springframework.data.redis.connection.Subscription;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -18,8 +19,8 @@ public class SpringDataCache extends AbsExternalCache {
 
     private final Set<String> subed = new ConcurrentSkipListSet<>();
 
-    public SpringDataCache(NamespaceConfig config, RedisTemplate<String, Object> redisTemplate) {
-        super(config);
+    public SpringDataCache(RemoteConfig remoteConfig, RedisTemplate<String, Object> redisTemplate) {
+        super(remoteConfig);
         this.redisTemplate = redisTemplate;
         this.cacheClientName = "SpringRedisTemplate";
     }

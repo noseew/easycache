@@ -6,7 +6,7 @@ import org.galileo.easycache.common.*;
 import org.galileo.easycache.common.constants.CacheConstants;
 import org.galileo.easycache.common.enums.CacheType;
 import org.galileo.easycache.common.enums.OpType;
-import org.galileo.easycache.core.core.config.NamespaceConfig;
+import org.galileo.easycache.core.core.config.RemoteConfig;
 import org.galileo.easycache.core.event.PubSub;
 import org.galileo.easycache.core.exception.CacheInterruptException;
 import org.galileo.easycache.core.utils.BatchUtils;
@@ -41,16 +41,16 @@ public abstract class AbsExternalCache extends AbsCache implements PubSub, Nativ
         batchPubScheduled = new ScheduledThreadPoolExecutor(1, new ThreadFactoryBuilder().setDaemon(true).setNameFormat("batchPubScheduled-").build());
     }
 
-    protected AbsExternalCache(NamespaceConfig config) {
-        super(config, CacheType.REMOTE);
+    protected AbsExternalCache(RemoteConfig remoteConfig) {
+        super(remoteConfig, CacheType.REMOTE);
         keySerial = EasyCacheManager
-                .getSerialPolicy(config.getKeySerialName(), EasyCacheManager.getSerialPolicy(SerialPolicy.STRING, null));
-        valueWrapperSerial = EasyCacheManager.getSerialPolicy(config.getValueWrapperSerialName(), EasyCacheManager
+                .getSerialPolicy(remoteConfig.getKeySerialName(), EasyCacheManager.getSerialPolicy(SerialPolicy.STRING, null));
+        valueWrapperSerial = EasyCacheManager.getSerialPolicy(remoteConfig.getValueWrapperSerialName(), EasyCacheManager
                 .getSerialPolicy(SerialPolicy.Jackson, null));
-        valueCompressSerial = EasyCacheManager.getSerialPolicy(config.getValueCompressSerialName(), EasyCacheManager
+        valueCompressSerial = EasyCacheManager.getSerialPolicy(remoteConfig.getValueCompressSerialName(), EasyCacheManager
                 .getSerialPolicy(SerialPolicy.Gzip, null));
         valueSerial = EasyCacheManager
-                .getSerialPolicy(config.getValueSerialName(), EasyCacheManager.getSerialPolicy(SerialPolicy.Jackson, null));
+                .getSerialPolicy(remoteConfig.getValueSerialName(), EasyCacheManager.getSerialPolicy(SerialPolicy.Jackson, null));
         this.cacheLock = new RedisCacheLock(this);
     }
 
@@ -99,7 +99,7 @@ public abstract class AbsExternalCache extends AbsCache implements PubSub, Nativ
     @FilterProxy(opType = OpType.PUT)
     public <K, V> void put(String key, @ValParam(paramType = ValWrapper.class) ValWrapper valWrapper) {
         InnerAssertUtils.notNull(valWrapper, "'valWrapper' can not be null");
-        boolean cacheNullValue = config.getParent().getPierceDefend().isCacheNullValue();
+        boolean cacheNullValue = remoteConfig.getParent().getPierceDefend().isCacheNullValue();
         if (!cacheNullValue && valWrapper.getValue() == null) {
             return;
         }
@@ -121,7 +121,7 @@ public abstract class AbsExternalCache extends AbsCache implements PubSub, Nativ
     @FilterProxy(opType = OpType.PUT)
     public <K, V> boolean putIfAbsent(String key, @ValParam(paramType = ValWrapper.class) ValWrapper valWrapper) {
         InnerAssertUtils.notNull(valWrapper, "'valWrapper' can not be null");
-        boolean cacheNullValue = config.getParent().getPierceDefend().isCacheNullValue();
+        boolean cacheNullValue = remoteConfig.getParent().getPierceDefend().isCacheNullValue();
         if (!cacheNullValue && valWrapper.getValue() == null) {
             return false;
         }
@@ -197,7 +197,7 @@ public abstract class AbsExternalCache extends AbsCache implements PubSub, Nativ
 
     @Override
     public Object serialVal(ValWrapper valWrapper) {
-        return InnerCodecUtils.serialVal(valWrapper, this.valueSerial, this.valueCompressSerial, config.getCompressThreshold());
+        return InnerCodecUtils.serialVal(valWrapper, this.valueSerial, this.valueCompressSerial, remoteConfig.getCompressThreshold());
     }
 
     private void startBatchPubTask() {
@@ -214,8 +214,8 @@ public abstract class AbsExternalCache extends AbsCache implements PubSub, Nativ
                         msg.getKeys().addAll(keys);
                         doPub(msg.getChannel(), msg);
                     }
-                }, config.getParent().getBatchPubTime().toMillis(),
-                config.getParent().getBatchPubTime().toMillis(),
+                }, remoteConfig.getParent().getBatchPubTime().toMillis(),
+                remoteConfig.getParent().getBatchPubTime().toMillis(),
                 TimeUnit.MILLISECONDS);
     }
 
@@ -227,18 +227,18 @@ public abstract class AbsExternalCache extends AbsCache implements PubSub, Nativ
      */
     @Override
     public void pub(String channel, PubSubBody msg) {
-        if (!config.getParent().isEnabledPubsub()) {
+        if (!remoteConfig.getParent().isEnabledPubsub()) {
             return;
         }
         AtomicInteger waitPubSize = new AtomicInteger();
         if (!batchPubQueue.isEmpty()) {
             batchPubQueue.forEach((channelType, keys) -> waitPubSize.addAndGet(keys.size()));
         }
-        if (waitPubSize.get() >= config.getParent().getBatchPubSize()
-                || msg.getKeys().size() >= config.getParent().getBatchPubSize()) {
+        if (waitPubSize.get() >= remoteConfig.getParent().getBatchPubSize()
+                || msg.getKeys().size() >= remoteConfig.getParent().getBatchPubSize()) {
             // 待发送队列有点大, 直接pub
             doPub(channel, msg);
-        } else if (!config.getParent().isBatchPub()) {
+        } else if (!remoteConfig.getParent().isBatchPub()) {
             // 指定了直接pub
             doPub(channel, msg);
         } else {
@@ -256,7 +256,7 @@ public abstract class AbsExternalCache extends AbsCache implements PubSub, Nativ
     }
 
     private void startSub() {
-        if (!config.getParent().isEnabledPubsub()) {
+        if (!remoteConfig.getParent().isEnabledPubsub()) {
             return;
         }
         logger.debug("EasyCache AbsExternalCache 开始订阅");

@@ -6,6 +6,7 @@ import org.galileo.easycache.common.ValWrapper;
 import org.galileo.easycache.common.constants.CacheConstants;
 import org.galileo.easycache.common.enums.OpType;
 import org.galileo.easycache.core.core.config.NamespaceConfig;
+import org.galileo.easycache.core.core.config.RemoteConfig;
 import org.galileo.easycache.core.utils.InnerObjectUtils;
 
 import java.lang.reflect.Method;
@@ -35,7 +36,7 @@ public class FilterContext {
     /**
      * 缓存实例对象所属的配置
      */
-    private NamespaceConfig namespaceConfig;
+    private RemoteConfig remoteConfig;
     /**
      * 目标方法
      */
@@ -65,12 +66,12 @@ public class FilterContext {
      */
     private boolean hit;
 
-    public FilterContext(CacheProxy cache, NamespaceConfig namespaceConfig, String key, Set<String> keys,
-            OpType opType, Method method, Object[] args) {
+    public FilterContext(CacheProxy cache, RemoteConfig remoteConfig, String key, Set<String> keys,
+                         OpType opType, Method method, Object[] args) {
         this.cache = cache;
         this.key = key;
         this.keys = keys;
-        this.namespaceConfig = namespaceConfig;
+        this.remoteConfig = remoteConfig;
         this.opType = opType;
         this.method = method;
         this.args = args;
@@ -113,12 +114,12 @@ public class FilterContext {
         this.cache = cache;
     }
 
-    public NamespaceConfig getNamespaceConfig() {
-        return namespaceConfig;
+    public RemoteConfig getRemoteConfig() {
+        return remoteConfig;
     }
 
-    public void setNamespaceConfig(NamespaceConfig namespaceConfig) {
-        this.namespaceConfig = namespaceConfig;
+    public void setRemoteConfig(RemoteConfig remoteConfig) {
+        this.remoteConfig = remoteConfig;
     }
 
     public Method getMethod() {

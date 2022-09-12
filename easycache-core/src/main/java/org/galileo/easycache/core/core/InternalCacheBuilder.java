@@ -3,6 +3,7 @@ package org.galileo.easycache.core.core;
 
 import org.galileo.easycache.core.core.config.InternalConfig;
 import org.galileo.easycache.core.core.config.NamespaceConfig;
+import org.galileo.easycache.core.core.config.RemoteConfig;
 import org.galileo.easycache.core.utils.InnerAssertUtils;
 
 import java.time.Duration;
@@ -13,8 +14,8 @@ public abstract class InternalCacheBuilder<T extends InternalCacheBuilder<T>> ex
     protected int maximumSize;
     protected Duration expireAfterWrite;
 
-    protected InternalCacheBuilder(NamespaceConfig namespaceConfig, InternalConfig internalConfig) {
-        super(namespaceConfig);
+    protected InternalCacheBuilder(RemoteConfig remoteConfig, InternalConfig internalConfig) {
+        super(remoteConfig);
         this.internalConfig = internalConfig;
     }
 
