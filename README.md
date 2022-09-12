@@ -61,22 +61,22 @@ easycache.ns.dft.remote.type=redis#spring.redis-org.springframework.boot.autocon
 ### 3. 使用API
 
 ```java
-EasyCacheHelper.put(namespace, cacheName, key, userDO, 100 * 1000);
-UserDO userDO1 = EasyCacheHelper.get(namespace, cacheName, key, UserDO.class);
+EasyCacheUtils.put(namespace, cacheName, key, userDO, 100 * 1000);
+UserDO userDO1 = EasyCacheUtils.get(namespace, cacheName, key, UserDO.class);
 ```
 
 
 
 # 特点
 
+- 支持注解+API
 - 支持多级缓存(默认远程Redis, 本地Caffeine)
-- 支持bigkey检测和过滤告警
+- 支持bigkey检测和过滤
 - 远程缓存失败, 可容错降级成本地缓存
 - 支持多namespace, 多组远程+本地的配置
-- 灵活地使用方式, 注解+API
 - 支持配置动态更新生效(绝大多数配置, 在SpringCloud环境下)
-- 支持缓存key管理(待实现)
-- 支持缓存key监控(待实现)
+- 支持缓存管理(规划中)
+- 支持缓存监控(规划中)
 
 
-更多支持开发中...
+更多支持开发中..., 欢迎参与建设
