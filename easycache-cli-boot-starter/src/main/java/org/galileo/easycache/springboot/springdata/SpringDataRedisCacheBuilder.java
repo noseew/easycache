@@ -2,7 +2,6 @@ package org.galileo.easycache.springboot.springdata;
 
 import org.galileo.easycache.common.CacheClient;
 import org.galileo.easycache.core.core.ExternalCacheBuilder;
-import org.galileo.easycache.core.core.config.NamespaceConfig;
 import org.galileo.easycache.core.core.config.RemoteConfig;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.data.redis.connection.RedisConnectionFactory;

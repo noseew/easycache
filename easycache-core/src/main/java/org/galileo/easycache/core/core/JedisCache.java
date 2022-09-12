@@ -1,8 +1,7 @@
 package org.galileo.easycache.core.core;
 
-import org.galileo.easycache.common.SerialPolicy;
-import org.galileo.easycache.core.core.config.NamespaceConfig;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+import org.galileo.easycache.common.SerialPolicy;
 import org.galileo.easycache.core.core.config.RemoteConfig;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;

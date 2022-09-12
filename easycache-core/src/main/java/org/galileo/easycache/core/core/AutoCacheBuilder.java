@@ -4,7 +4,6 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.galileo.easycache.common.CacheClient;
 import org.galileo.easycache.common.CacheProxy;
 import org.galileo.easycache.core.core.config.CacheReporterConfig;
-import org.galileo.easycache.core.core.config.NamespaceConfig;
 import org.galileo.easycache.core.core.config.RemoteConfig;
 import org.galileo.easycache.core.event.CacheOpEventPublisher;
 import org.galileo.easycache.core.filter.RedisCacheManagerListener;

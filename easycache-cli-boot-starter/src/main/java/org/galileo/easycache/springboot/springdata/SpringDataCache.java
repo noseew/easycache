@@ -1,7 +1,6 @@
 package org.galileo.easycache.springboot.springdata;
 
 import org.galileo.easycache.core.core.AbsExternalCache;
-import org.galileo.easycache.core.core.config.NamespaceConfig;
 import org.galileo.easycache.core.core.config.RemoteConfig;
 import org.galileo.easycache.core.utils.InnerCodecUtils;
 import org.springframework.data.redis.connection.Subscription;

@@ -2,7 +2,6 @@ package org.galileo.easycache.core.core;
 
 
 import org.galileo.easycache.core.core.config.InternalConfig;
-import org.galileo.easycache.core.core.config.NamespaceConfig;
 import org.galileo.easycache.core.core.config.RemoteConfig;
 import org.galileo.easycache.core.utils.InnerAssertUtils;
 

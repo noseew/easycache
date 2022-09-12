@@ -1,7 +1,7 @@
 package org.galileo.easycache.core.filter;
 
-import org.galileo.easycache.common.enums.CacheType;
 import org.apache.commons.lang3.StringUtils;
+import org.galileo.easycache.common.enums.CacheType;
 
 /**
  * 延迟删除, TODO 删除量非常大的时候, 队列很容易满

@@ -1,11 +1,11 @@
 package org.galileo.easycache.easycachetest.perftest;
 
+import lombok.Data;
 import org.galileo.easycache.common.CacheClient;
 import org.galileo.easycache.common.ValWrapper;
 import org.galileo.easycache.common.constants.CacheConstants;
 import org.galileo.easycache.common.constants.SubNamespace;
 import org.galileo.easycache.easycachetest.utils.ThreadUtils;
-import lombok.Data;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

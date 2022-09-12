@@ -1,8 +1,8 @@
 package org.galileo.easycache.springboot.processor;
 
 
-import org.galileo.easycache.core.core.config.Rebinder;
 import org.galileo.easycache.core.core.config.EasyCacheConfig;
+import org.galileo.easycache.core.core.config.Rebinder;
 
 public abstract class AbsEasyCacheConfigProcessor implements Rebinder {
 

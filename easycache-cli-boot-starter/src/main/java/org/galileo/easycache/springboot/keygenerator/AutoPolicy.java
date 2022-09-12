@@ -1,5 +1,6 @@
 package org.galileo.easycache.springboot.keygenerator;
 
+import org.apache.commons.lang3.StringUtils;
 import org.galileo.easycache.anno.CacheRemove;
 import org.galileo.easycache.anno.CacheRemoveAll;
 import org.galileo.easycache.anno.CacheUpdate;
@@ -7,7 +8,6 @@ import org.galileo.easycache.anno.Cached;
 import org.galileo.easycache.common.KeyGeneratorPolicy;
 import org.galileo.easycache.common.constants.CacheConstants;
 import org.galileo.easycache.springboot.aop.AnnoAttributeUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

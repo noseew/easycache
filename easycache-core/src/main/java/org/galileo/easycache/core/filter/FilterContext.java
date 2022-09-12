@@ -5,7 +5,6 @@ import org.galileo.easycache.common.CacheProxy;
 import org.galileo.easycache.common.ValWrapper;
 import org.galileo.easycache.common.constants.CacheConstants;
 import org.galileo.easycache.common.enums.OpType;
-import org.galileo.easycache.core.core.config.NamespaceConfig;
 import org.galileo.easycache.core.core.config.RemoteConfig;
 import org.galileo.easycache.core.utils.InnerObjectUtils;
 

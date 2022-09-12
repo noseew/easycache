@@ -6,11 +6,7 @@ import org.galileo.easycache.common.KeyGeneratorPolicy;
 import org.galileo.easycache.common.constants.CacheConstants;
 import org.galileo.easycache.common.enums.BreakdownType;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * 自动缓存注解, 修饰在方法上, 表示该方法已经被缓存组件装饰

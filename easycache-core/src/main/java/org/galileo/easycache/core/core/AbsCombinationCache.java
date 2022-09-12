@@ -3,7 +3,6 @@ package org.galileo.easycache.core.core;
 import org.galileo.easycache.common.*;
 import org.galileo.easycache.common.enums.CacheType;
 import org.galileo.easycache.common.enums.OpType;
-import org.galileo.easycache.core.core.config.NamespaceConfig;
 import org.galileo.easycache.core.core.config.RemoteConfig;
 import org.galileo.easycache.core.utils.InnerAssertUtils;
 import org.slf4j.Logger;

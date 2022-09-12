@@ -1,12 +1,12 @@
 package org.galileo.easycache.springboot.config;
 
+import org.aopalliance.intercept.MethodInterceptor;
 import org.galileo.easycache.anno.CacheRemove;
 import org.galileo.easycache.anno.CacheRemoveAll;
 import org.galileo.easycache.anno.CacheUpdate;
 import org.galileo.easycache.anno.Cached;
 import org.galileo.easycache.common.constants.CacheConstants;
 import org.galileo.easycache.core.core.config.EasyCacheConfig;
-import org.aopalliance.intercept.MethodInterceptor;
 import org.galileo.easycache.springboot.aop.EasyCacheAdvisor;
 import org.galileo.easycache.springboot.aop.EasyCacheInterceptor;
 import org.galileo.easycache.springboot.processor.EasyCacheConfigParentProcessor;

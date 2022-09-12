@@ -1,9 +1,9 @@
 package org.galileo.easycache.core.utils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.galileo.easycache.common.SerialPolicy;
 import org.galileo.easycache.common.ValWrapper;
 import org.galileo.easycache.core.core.EasyCacheManager;
-import org.apache.commons.lang3.StringUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;

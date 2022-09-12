@@ -1,5 +1,6 @@
 package org.galileo.easycache.springboot.service;
 
+import org.apache.commons.lang3.ClassUtils;
 import org.galileo.easycache.common.CacheProxy;
 import org.galileo.easycache.common.ExpirePolicy;
 import org.galileo.easycache.common.KeyGeneratorPolicy;
@@ -8,12 +9,11 @@ import org.galileo.easycache.common.constants.CacheConstants;
 import org.galileo.easycache.common.enums.CacheTagType;
 import org.galileo.easycache.core.core.EasyCacheManager;
 import org.galileo.easycache.core.core.config.CacheNameConfig;
+import org.galileo.easycache.core.core.config.EasyCacheConfig;
 import org.galileo.easycache.core.core.config.KeyConfig;
 import org.galileo.easycache.core.core.config.NamespaceConfig;
-import org.galileo.easycache.core.core.config.EasyCacheConfig;
 import org.galileo.easycache.core.utils.InnerKeyUtils;
 import org.galileo.easycache.springboot.keygenerator.AutoPolicy;
-import org.apache.commons.lang3.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;

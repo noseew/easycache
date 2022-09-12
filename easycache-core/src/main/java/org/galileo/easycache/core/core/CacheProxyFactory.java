@@ -5,7 +5,6 @@ import org.galileo.easycache.common.*;
 import org.galileo.easycache.common.enums.CacheTagType;
 import org.galileo.easycache.common.enums.CacheType;
 import org.galileo.easycache.common.enums.OpType;
-import org.galileo.easycache.core.core.config.NamespaceConfig;
 import org.galileo.easycache.core.core.config.RemoteConfig;
 import org.galileo.easycache.core.filter.AbsInvokeFilter;
 import org.galileo.easycache.core.filter.FilterContext;

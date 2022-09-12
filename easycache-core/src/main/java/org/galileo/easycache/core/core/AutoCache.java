@@ -3,7 +3,6 @@ package org.galileo.easycache.core.core;
 
 import org.galileo.easycache.common.CacheClient;
 import org.galileo.easycache.common.CacheProxy;
-import org.galileo.easycache.core.core.config.NamespaceConfig;
 import org.galileo.easycache.core.core.config.RemoteConfig;
 
 /**

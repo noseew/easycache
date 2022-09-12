@@ -5,7 +5,6 @@ import org.galileo.easycache.common.CacheLock;
 import org.galileo.easycache.common.CacheProxy;
 import org.galileo.easycache.common.Filter;
 import org.galileo.easycache.common.enums.CacheType;
-import org.galileo.easycache.core.core.config.NamespaceConfig;
 import org.galileo.easycache.core.core.config.RemoteConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

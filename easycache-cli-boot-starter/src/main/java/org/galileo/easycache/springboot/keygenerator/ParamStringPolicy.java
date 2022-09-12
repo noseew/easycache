@@ -1,7 +1,7 @@
 package org.galileo.easycache.springboot.keygenerator;
 
-import org.galileo.easycache.core.utils.InnerMD5Utils;
 import org.apache.commons.lang3.ClassUtils;
+import org.galileo.easycache.core.utils.InnerMD5Utils;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
