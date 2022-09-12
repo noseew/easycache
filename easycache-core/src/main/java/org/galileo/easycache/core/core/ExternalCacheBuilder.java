@@ -57,9 +57,9 @@ public abstract class ExternalCacheBuilder<T extends ExternalCacheBuilder<T>>
         // 编解码器
         addFilters(new CodecFilter(remoteConfig));
         // 大key检测器
-        addFilters(new BigKeyCheckFilter(remoteConfig.getParent().getBigKey(), namespace));
+        addFilters(new BigKeyCheckFilter(remoteConfig.getParent().getParent().getBigKey(), namespace));
         // 熔断器
-        addFilters(new CircuitBreakerFilter(remoteConfig.getParent(), namespace));
+        addFilters(new CircuitBreakerFilter(remoteConfig.getParent().getParent(), namespace));
         // 删除失败补偿器
         addFilters(new FailCompensateFilter(namespace));
     }

@@ -65,7 +65,7 @@ public abstract class AbsCombinationCache extends AbsCache {
             hitCache = multiCache.get(hitIndex);
             valWrapper = hitCache.get(key);
             if (valWrapper != null) {
-                if (remoteConfig.getParent().isDebug()) {
+                if (remoteConfig.getParent().getParent().isDebug()) {
                     logger.debug("EasyCache 多级缓存命中 {} 级, key = {}", hitIndex, key);
                 }
                 break;
@@ -166,7 +166,9 @@ public abstract class AbsCombinationCache extends AbsCache {
     }
 
     protected boolean enableLocal() {
-        return remoteConfig.getParent().getLocal().isEnabled();
+        String cacheType = remoteConfig.getParent().getParent().getNs().get(remoteConfig.getNamespace()).getType();
+        return CacheType.BOTH.getVal().equals(cacheType)
+                || CacheType.LOCAL.getVal().equals(cacheType);
     }
 
     protected boolean validCache(int currentIndex) {

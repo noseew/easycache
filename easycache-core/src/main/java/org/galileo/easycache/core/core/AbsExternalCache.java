@@ -99,7 +99,7 @@ public abstract class AbsExternalCache extends AbsCache implements PubSub, Nativ
     @FilterProxy(opType = OpType.PUT)
     public <K, V> void put(String key, @ValParam(paramType = ValWrapper.class) ValWrapper valWrapper) {
         InnerAssertUtils.notNull(valWrapper, "'valWrapper' can not be null");
-        boolean cacheNullValue = remoteConfig.getParent().getPierceDefend().isCacheNullValue();
+        boolean cacheNullValue = remoteConfig.getParent().getParent().getPierceDefend().isCacheNullValue();
         if (!cacheNullValue && valWrapper.getValue() == null) {
             return;
         }
@@ -121,7 +121,7 @@ public abstract class AbsExternalCache extends AbsCache implements PubSub, Nativ
     @FilterProxy(opType = OpType.PUT)
     public <K, V> boolean putIfAbsent(String key, @ValParam(paramType = ValWrapper.class) ValWrapper valWrapper) {
         InnerAssertUtils.notNull(valWrapper, "'valWrapper' can not be null");
-        boolean cacheNullValue = remoteConfig.getParent().getPierceDefend().isCacheNullValue();
+        boolean cacheNullValue = remoteConfig.getParent().getParent().getPierceDefend().isCacheNullValue();
         if (!cacheNullValue && valWrapper.getValue() == null) {
             return false;
         }
@@ -214,8 +214,8 @@ public abstract class AbsExternalCache extends AbsCache implements PubSub, Nativ
                         msg.getKeys().addAll(keys);
                         doPub(msg.getChannel(), msg);
                     }
-                }, remoteConfig.getParent().getBatchPubTime().toMillis(),
-                remoteConfig.getParent().getBatchPubTime().toMillis(),
+                }, remoteConfig.getBatchPubTime().toMillis(),
+                remoteConfig.getBatchPubTime().toMillis(),
                 TimeUnit.MILLISECONDS);
     }
 
@@ -227,18 +227,18 @@ public abstract class AbsExternalCache extends AbsCache implements PubSub, Nativ
      */
     @Override
     public void pub(String channel, PubSubBody msg) {
-        if (!remoteConfig.getParent().isEnabledPubsub()) {
+        if (!remoteConfig.isEnabledPubsub()) {
             return;
         }
         AtomicInteger waitPubSize = new AtomicInteger();
         if (!batchPubQueue.isEmpty()) {
             batchPubQueue.forEach((channelType, keys) -> waitPubSize.addAndGet(keys.size()));
         }
-        if (waitPubSize.get() >= remoteConfig.getParent().getBatchPubSize()
-                || msg.getKeys().size() >= remoteConfig.getParent().getBatchPubSize()) {
+        if (waitPubSize.get() >= remoteConfig.getBatchPubSize()
+                || msg.getKeys().size() >= remoteConfig.getBatchPubSize()) {
             // 待发送队列有点大, 直接pub
             doPub(channel, msg);
-        } else if (!remoteConfig.getParent().isBatchPub()) {
+        } else if (!remoteConfig.isBatchPub()) {
             // 指定了直接pub
             doPub(channel, msg);
         } else {
@@ -256,7 +256,7 @@ public abstract class AbsExternalCache extends AbsCache implements PubSub, Nativ
     }
 
     private void startSub() {
-        if (!remoteConfig.getParent().isEnabledPubsub()) {
+        if (!remoteConfig.isEnabledPubsub()) {
             return;
         }
         logger.debug("EasyCache AbsExternalCache 开始订阅");

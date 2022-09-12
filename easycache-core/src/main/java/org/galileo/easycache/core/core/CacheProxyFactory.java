@@ -82,7 +82,7 @@ public class CacheProxyFactory {
                                     String cacheName = args[0].toString();
                                     CacheTagType cacheTagType = opType.isSet() ? CacheTagType.SET : CacheTagType.ZSET;
                                     args[0] = InnerKeyUtils.buildFullKey(namespaceConfig, cacheTagType, cacheName);
-                                    if (namespaceConfig.getParent().isDebug()) {
+                                    if (namespaceConfig.getParent().getParent().isDebug()) {
                                         logger.debug("EasyCache Redis 客户端操作 cacheName={} 替换成key={}", cacheName, args[0]);
                                     }
                                 }

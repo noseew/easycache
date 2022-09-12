@@ -20,7 +20,7 @@ public class InnerKeyUtils {
     }
 
     public static String buildFullKey(RemoteConfig namespaceConfig, CacheTagType cacheTagType, String cacheName, String key) {
-        EasyCacheConfig cacheConfig = namespaceConfig.getParent();
+        EasyCacheConfig cacheConfig = namespaceConfig.getParent().getParent();
         return buildFullKey(cacheConfig, namespaceConfig.getNamespace(), cacheTagType, cacheName, key);
     }
 

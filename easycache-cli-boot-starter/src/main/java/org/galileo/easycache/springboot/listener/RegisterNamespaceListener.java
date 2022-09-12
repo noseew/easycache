@@ -6,12 +6,10 @@ import org.galileo.easycache.common.constants.CacheConstants;
 import org.galileo.easycache.common.constants.SubNamespace;
 import org.galileo.easycache.common.enums.CacheExternalType;
 import org.galileo.easycache.common.enums.CacheInternalType;
-import org.galileo.easycache.common.enums.CacheTagType;
 import org.galileo.easycache.common.enums.CacheType;
 import org.galileo.easycache.core.core.*;
-import org.galileo.easycache.core.core.config.InternalConfig;
-import org.galileo.easycache.core.core.config.NamespaceConfig;
 import org.galileo.easycache.core.core.config.EasyCacheConfig;
+import org.galileo.easycache.core.core.config.InternalConfig;
 import org.galileo.easycache.core.core.config.RemoteConfig;
 import org.galileo.easycache.springboot.springdata.SpringDataRedisCacheBuilder;
 import org.slf4j.Logger;
@@ -41,18 +39,19 @@ public class RegisterNamespaceListener
                 return;
             }
             EasyCacheConfig cacheConfig = applicationContext.getBean(EasyCacheConfig.class);
+            if (cacheConfig.getNs().isEmpty()) {
+                logger.error("EasyCache ns 配置为空");
+                return;
+            }
             cacheConfig.getNs().forEach((ns, nsConfig) -> {
+                String cacheBeanName = CacheConstants.cacheBeanName(ns);
                 if (nsConfig.getType().equals(CacheType.REMOTE.getVal()) || nsConfig.getType().equals(CacheType.BOTH.getVal())) {
-                    String localCacheBeanName = CacheConstants.cacheBeanName(CacheConstants.DEFAULT_NAMESPACE);
-                    CacheClient localCache = registerInternalCache(localCacheBeanName + SubNamespace.LOCAL_POSTFIX, cacheConfig, applicationContext);
-
-                    String cacheBeanName = CacheConstants.cacheBeanName(ns);
+                    CacheClient localCache = registerInternalCache(cacheBeanName + SubNamespace.LOCAL_POSTFIX, nsConfig.getLocal(), applicationContext);
                     CacheClient remoteCache = registerExternalCache(cacheBeanName + SubNamespace.REMOTE_POSTFIX, nsConfig.getRemote(), applicationContext);
                     registerCombinationCache(cacheBeanName, nsConfig.getRemote(), localCache, remoteCache, applicationContext);
                 }
                 if (nsConfig.getType().equals(CacheType.LOCAL.getVal())) {
-                    String localCacheBeanName = CacheConstants.cacheBeanName(CacheConstants.DEFAULT_NAMESPACE);
-                    CacheClient localCache = registerInternalCache(localCacheBeanName + SubNamespace.LOCAL_POSTFIX, cacheConfig, applicationContext);
+                    CacheClient localCache = registerInternalCache(cacheBeanName + SubNamespace.LOCAL_POSTFIX, nsConfig.getLocal(), applicationContext);
                 }
             });
         } catch (Exception e) {
@@ -102,8 +101,7 @@ public class RegisterNamespaceListener
         return null;
     }
 
-    private CacheClient registerInternalCache(String namespace, EasyCacheConfig cacheConfig, ConfigurableApplicationContext applicationContext) {
-        InternalConfig internalConfig = cacheConfig.getLocal();
+    private CacheClient registerInternalCache(String namespace, InternalConfig internalConfig, ConfigurableApplicationContext applicationContext) {
         if (internalConfig == null) {
             throw new IllegalArgumentException("cache Local 配置为空");
         }

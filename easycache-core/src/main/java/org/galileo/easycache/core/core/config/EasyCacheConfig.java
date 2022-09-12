@@ -42,22 +42,6 @@ public class EasyCacheConfig extends InheritableConfig<EasyCacheConfig> {
      * debug调试日志
      */
     private boolean debug = false;
-    /**
-     * 开启Pubsub功能
-     */
-    private boolean enabledPubsub = true;
-    /**
-     * 批量Pub优化
-     */
-    private boolean batchPub = true;
-    /**
-     * 批量Pub数量
-     */
-    private int batchPubSize = 500;
-    /**
-     * 批量Pub时间, 单位毫秒
-     */
-    private Duration batchPubTime = Duration.ofMillis(200);
 
     /**
      * 大缓存配置
@@ -251,38 +235,6 @@ public class EasyCacheConfig extends InheritableConfig<EasyCacheConfig> {
 
     public void setDebug(boolean debug) {
         this.debug = debug;
-    }
-
-    public boolean isBatchPub() {
-        return batchPub;
-    }
-
-    public void setBatchPub(boolean batchPub) {
-        this.batchPub = batchPub;
-    }
-
-    public Duration getBatchPubTime() {
-        return batchPubTime;
-    }
-
-    public void setBatchPubTime(Duration batchPubTime) {
-        this.batchPubTime = batchPubTime;
-    }
-
-    public int getBatchPubSize() {
-        return batchPubSize;
-    }
-
-    public void setBatchPubSize(int batchPubSize) {
-        this.batchPubSize = batchPubSize;
-    }
-
-    public boolean isEnabledPubsub() {
-        return enabledPubsub;
-    }
-
-    public void setEnabledPubsub(boolean enabledPubsub) {
-        this.enabledPubsub = enabledPubsub;
     }
 
     public CacheReporterConfig getCacheReporter() {

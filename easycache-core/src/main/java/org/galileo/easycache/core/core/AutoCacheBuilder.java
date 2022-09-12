@@ -53,7 +53,7 @@ public class AutoCacheBuilder extends AbstractCacheBuilder<AutoCacheBuilder> {
         cacheOpEventPublisher.setExecutor(executor);
 
         // 添加事件监听器, 缓存key管理监听
-        CacheReporterConfig cacheReporter = remoteConfig.getParent().getCacheReporter();
+        CacheReporterConfig cacheReporter = remoteConfig.getParent().getParent().getCacheReporter();
         if (cacheReporter != null && cacheReporter.isEnabled()) {
             RedisCacheManagerListener cacheManagerListener = new RedisCacheManagerListener();
             EasyCacheManager.addEventListener(cacheManagerListener);

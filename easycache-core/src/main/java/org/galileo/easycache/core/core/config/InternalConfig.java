@@ -7,10 +7,6 @@ import org.galileo.easycache.common.enums.CacheInternalType;
 import java.time.Duration;
 
 public class InternalConfig {
-    /**
-     * 开关
-     */
-    private boolean enabled = CacheConstants.DEFAULT_LOCAL_ENABLED;
 
     /**
      * 缓存类型
@@ -48,13 +44,5 @@ public class InternalConfig {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
     }
 }

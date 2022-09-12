@@ -1,6 +1,7 @@
 package org.galileo.easycache.core.core.config;
 
 import org.galileo.easycache.common.constants.CacheConstants;
+import org.galileo.easycache.common.enums.CacheExternalType;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -11,7 +12,7 @@ import java.util.Map;
  * 缓存实例配置
  * 用于创建一个缓存实例, 也就是 Cache 对象
  */
-public class RemoteConfig extends InheritableConfig<EasyCacheConfig> {
+public class RemoteConfig extends InheritableConfig<NamespaceConfig> {
 
     /**
      * 当前namespace名
@@ -22,11 +23,27 @@ public class RemoteConfig extends InheritableConfig<EasyCacheConfig> {
      * cacheName配置
      */
     private Map<String, CacheNameConfig> cacheName = new HashMap<>();
+    /**
+     * 开启Pubsub功能
+     */
+    private boolean enabledPubsub = true;
+    /**
+     * 批量Pub优化
+     */
+    private boolean batchPub = true;
+    /**
+     * 批量Pub数量
+     */
+    private int batchPubSize = 500;
+    /**
+     * 批量Pub时间, 单位毫秒
+     */
+    private Duration batchPubTime = Duration.ofMillis(200);
 
     /**
      * 缓存组件类型
      */
-    private String type;
+    private String type = CacheExternalType.REDIS.getVal();
 
     private int database = 0;
 
@@ -162,6 +179,38 @@ public class RemoteConfig extends InheritableConfig<EasyCacheConfig> {
 
     public Lettuce getLettuce() {
         return this.lettuce;
+    }
+
+    public boolean isBatchPub() {
+        return batchPub;
+    }
+
+    public void setBatchPub(boolean batchPub) {
+        this.batchPub = batchPub;
+    }
+
+    public Duration getBatchPubTime() {
+        return batchPubTime;
+    }
+
+    public void setBatchPubTime(Duration batchPubTime) {
+        this.batchPubTime = batchPubTime;
+    }
+
+    public int getBatchPubSize() {
+        return batchPubSize;
+    }
+
+    public void setBatchPubSize(int batchPubSize) {
+        this.batchPubSize = batchPubSize;
+    }
+
+    public boolean isEnabledPubsub() {
+        return enabledPubsub;
+    }
+
+    public void setEnabledPubsub(boolean enabledPubsub) {
+        this.enabledPubsub = enabledPubsub;
     }
 
     public static class Pool {
