@@ -1,0 +1,9 @@
+maven_build:
+  stage: build
+  script:
+    - echo $CI_COMMIT_REF_NAME
+    - mvn clean install deploy -Dmaven.test.skip=true
+  tags:
+    - cisonarjdk11
+  only:
+    - master
