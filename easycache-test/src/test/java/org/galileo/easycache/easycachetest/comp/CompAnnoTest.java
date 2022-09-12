@@ -1,7 +1,7 @@
 package org.galileo.easycache.easycachetest.comp;
 
 import org.galileo.easycache.common.CacheRedisClient;
-import org.galileo.easycache.core.utils.EasyCacheHelper;
+import org.galileo.easycache.core.utils.EasyCacheUtils;
 import org.galileo.easycache.easycachetest.utils.ThreadUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -68,7 +68,7 @@ public class CompAnnoTest extends TestCommon {
     }
 
     public void setTest() {
-        CacheRedisClient cacheRedisClient = EasyCacheHelper.getCacheRedisClient("dft");
+        CacheRedisClient cacheRedisClient = EasyCacheUtils.getCacheRedisClient("dft");
         String cacheName = "set" + UUID.randomUUID().toString();
         String val = "val1";
         cacheRedisClient.sAdd(cacheName, 60 * 1000, val);
@@ -88,7 +88,7 @@ public class CompAnnoTest extends TestCommon {
     }
 
     public void zsetTest() {
-        CacheRedisClient cacheRedisClient = EasyCacheHelper.getCacheRedisClient("dft");
+        CacheRedisClient cacheRedisClient = EasyCacheUtils.getCacheRedisClient("dft");
         String cacheName = "zset" + UUID.randomUUID().toString();
         String val = "val1";
 

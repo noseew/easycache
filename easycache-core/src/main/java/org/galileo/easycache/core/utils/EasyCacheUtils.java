@@ -10,9 +10,9 @@ import org.galileo.easycache.core.core.AbsCache;
 import org.galileo.easycache.core.core.EasyCacheManager;
 import org.galileo.easycache.core.core.config.RemoteConfig;
 
-public class EasyCacheHelper {
+public class EasyCacheUtils {
 
-    private EasyCacheHelper() {
+    private EasyCacheUtils() {
 
     }
 

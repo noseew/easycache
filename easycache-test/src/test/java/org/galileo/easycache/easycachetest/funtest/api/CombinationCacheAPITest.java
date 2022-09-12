@@ -3,7 +3,7 @@ package org.galileo.easycache.easycachetest.funtest.api;
 
 import org.galileo.easycache.common.CacheClient;
 import org.galileo.easycache.common.ValWrapper;
-import org.galileo.easycache.core.utils.EasyCacheHelper;
+import org.galileo.easycache.core.utils.EasyCacheUtils;
 import org.galileo.easycache.easycachetest.entity.UserDO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,9 +61,9 @@ public class CombinationCacheAPITest {
         userDO.setSalary(BigDecimal.valueOf(Math.random() * 1000));
         userDO.setAge((int) (Math.random() * 100));
         userDO.setCreateTime(new Date());
-        EasyCacheHelper.put(namespace, cacheName, key, userDO, 100 * 1000);
+        EasyCacheUtils.put(namespace, cacheName, key, userDO, 100 * 1000);
 
-        UserDO userDO1 = EasyCacheHelper.get(namespace, cacheName, key, UserDO.class);
+        UserDO userDO1 = EasyCacheUtils.get(namespace, cacheName, key, UserDO.class);
         System.out.println(userDO1);
         assert userDO.equals(userDO1);
     }
