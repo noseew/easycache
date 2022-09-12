@@ -1,69 +1,67 @@
 ############################################# 全部配置 #########################################
 
-easycache: # 第一级
-  enabled: true # 开启后动态生效
-  expire: 1000
-  appName: cacheTest
-  reflectType: 1
-  debug: true
-  enabledPubsub: true
-#  batchPubTime: 3s
-  pierceDefend: # 穿透防护
-    cacheNullValue: false
-    nullValueExpire: 3s
-  breakdownDefend: # 击穿防护
-    type: renewal # renewal 续期, none 仅仅加锁, nullVal 锁超时返回空值
-    renewalTime: 1m # 续期时间
-  circuitBreaker: # 防雪崩, 熔断降级
-    enabled: true
-  ns: # 远程缓存
-    dft: # 动态 namespace
-      type: both
-      remote:
-        type: redis
-        expire: 600
-        host: 127.0.0.1
-        port: 6379
-  #        password: XXXX
-        jedis:
-          pool:
-            max-active: 100
-            max-idle: 20
-            max-wait: 10000
-            min-idle: 4
-      cacheName:
-        post_detail:
-          expire: 600
-          key:
-            post_id00000001:
-              expire: 600
-    game: # 动态  其他namespace
-      type: both
-      remote:
-        type: redis
-        expire: 600
-        host: 127.0.0.1
-        port: 6379
-        #       password: XXXX
-        jedis:
-          pool:
-            max-active: 100
-            max-idle: 20
-            max-wait: 10000
-            min-idle: 4
-        cacheName:
-          post_detail:
-            expire: 600
-            key:
-              post_id001:
-                expire: 600
-  bigKey: # 大缓存控制
-    enableSizeLimit: true # 开启大缓存限制, 默认开启
-    warnSize: 10k # 告警大小(目前仅仅通过warn日志)
-    forbiddenSize: 1m # 拒绝存储大小
-    forbiddenException: false # 是否抛异常拒绝
-  cacheReporter:
-    enabled: false
+#easycache: # 第一级
+#  enabled: true # 开启后动态生效
+#  expire: 1000
+#  appName: cacheTest
+#  reflectType: 1
+#  debug: true
+#  pierceDefend: # 穿透防护
+#    cacheNullValue: false
+#    nullValueExpire: 3s
+#  breakdownDefend: # 击穿防护
+#    type: renewal # renewal 续期, none 仅仅加锁, nullVal 锁超时返回空值
+#    renewalTime: 1m # 续期时间
+#  circuitBreaker: # 防雪崩, 熔断降级
+#    enabled: true
+#  ns: # 远程缓存
+#    dft: # 动态 namespace
+#      type: both
+#      remote:
+#        type: redis
+#        expire: 600
+#        host: 127.0.0.1
+#        port: 6379
+#  #        password: XXXX
+#        jedis:
+#          pool:
+#            max-active: 100
+#            max-idle: 20
+#            max-wait: 10000
+#            min-idle: 4
+#      cacheName:
+#        post_detail:
+#          expire: 600
+#          key:
+#            post_id00000001:
+#              expire: 600
+#    game: # 动态  其他namespace
+#      type: both
+#      remote:
+#        type: redis
+#        expire: 600
+#        host: 127.0.0.1
+#        port: 6379
+#        #       password: XXXX
+#        jedis:
+#          pool:
+#            max-active: 100
+#            max-idle: 20
+#            max-wait: 10000
+#            min-idle: 4
+#        cacheName:
+#          post_detail:
+#            expire: 600
+#            key:
+#              post_id001:
+#                expire: 600
+#  bigKey: # 大缓存控制
+#    enableSizeLimit: true # 开启大缓存限制, 默认开启
+#    warnSize: 10k # 告警大小(目前仅仅通过warn日志)
+#    forbiddenSize: 1m # 拒绝存储大小
+#    forbiddenException: false # 是否抛异常拒绝
+#  cacheReporter:
+#    enabled: false
 
 
 ############################################# SpringData #########################################
@@ -74,9 +72,6 @@ easycache: # 第一级
 #  expire: 10000
 #  appName: springDataTest
 #  debug: true
-#  enabledPubsub: true
-#  batchPub: false
-#  batchPubTime: 3s
 #  circuitBreaker: # 防雪崩, 熔断降级
 #    enabled: false
 #  ns: # namespace
@@ -92,4 +87,15 @@ easycache: # 第一级
 #        type: redis#spring.redis-org.springframework.boot.autoconfigure.data.redis.RedisProperties
 #      local: # 公用本地缓存
 #        type: caffeine
+
+############################################# 最简配置 #########################################
+
+
+easycache: # 第一级
+  enabled: true # 开启后动态生效
+  ns: # namespace
+    dft: # 动态 namespace
+      type: both
+      remote:
+        type: redis#spring.redis-org.springframework.boot.autoconfigure.data.redis.RedisProperties
 

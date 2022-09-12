@@ -10,7 +10,7 @@
 
 ## 快速入门
 
-### 1. 导入依赖
+### 1. 导入依赖和配置
 
 ```xml
 <dependency>
@@ -18,6 +18,24 @@
     <artifactId>easycache-cli-boot-starter</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 </dependency>
+```
+
+```properties
+# SpringDataRedis 配置
+spring.redis.host=127.0.0.1
+spring.redis.port=6379
+#spring.redis.password=
+spring.redis.database=1
+spring.redis.timeout=10s
+spring.redis.jedis.pool.min-idle=4
+spring.redis.jedis.pool.max-idle=20
+spring.redis.jedis.pool.max-active=100
+spring.redis.jedis.pool.max-wait=10000
+
+# easyCache 配置
+easycache.enabled=true
+easycache.ns.dft.type=both
+easycache.ns.dft.remote.type=redis#spring.redis-org.springframework.boot.autoconfigure.data.redis.RedisProperties
 ```
 
 ### 2. 使用注解
