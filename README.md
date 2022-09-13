@@ -81,6 +81,11 @@ UserDO userDO1 = EasyCacheUtils.get(namespace, cacheName, key, UserDO.class);
 
 更多支持开发中..., 欢迎参与建设
 
+# TODO 
+- [ ] 分布式锁
+- [ ] redis 客户端支持
+- [ ] 管理后台监控
+
 
 # 打包
 
@@ -92,4 +97,14 @@ mvn package -Dmaven.test.skip=true
 mvn install -Dmaven.test.skip=true
 
 ```
+
+# Contributing
+
+欢迎参与项目贡献！比如提交PR修复一个bug，或者新建 [Issue](!(https://github.com/noseew/easycache/issues)) 讨论新特性或者变更。
+
+# Copyright and License
+
+产品开源免费，并且将持续提供免费的社区技术支持。个人或企业内部可自由的接入和使用。如有需要可邮件联系作者免费获取项目授权。
+
+
 
