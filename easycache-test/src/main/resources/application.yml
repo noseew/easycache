@@ -93,6 +93,7 @@
 
 easycache: # 第一级
   enabled: true # 开启后动态生效
+  componentScan: org.galileo.easycache
   ns: # namespace
     dft: # 动态 namespace
       type: both

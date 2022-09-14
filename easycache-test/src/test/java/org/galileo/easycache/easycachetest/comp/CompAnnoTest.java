@@ -25,7 +25,7 @@ public class CompAnnoTest extends TestCommon {
     public void test01() {
         long start = System.currentTimeMillis();
         int[] wight = runnableWight();
-        for (int i = 0; i < 10_0000; i++) {
+        for (int i = 0; i < 1_0000; i++) {
             lb(wight).run();
             if (i % 10 == 0) redisClientTest();
         }
@@ -37,7 +37,7 @@ public class CompAnnoTest extends TestCommon {
     public void test02() {
         long start = System.currentTimeMillis();
         int[] wight = runnableWight();
-        for (int i = 0; i < 100_0000; i++) {
+        for (int i = 0; i < 10_0000; i++) {
             try {
                 if (i % 50 == 0) redisClientTest();
                 ThreadUtils.poolExecutor.execute(() -> lb(wight).run());
