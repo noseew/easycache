@@ -1,8 +1,3 @@
-
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  org.galileo.easycache.springboot.config.EasyCacheAutoConfiguration,\
-  org.galileo.easycache.springboot.config.EasyCacheComponentConfiguration
-
 org.springframework.context.ApplicationListener=\
   org.galileo.easycache.springboot.listener.AddPolicyListener,\
   org.galileo.easycache.springboot.listener.RegisterNamespaceListener,\

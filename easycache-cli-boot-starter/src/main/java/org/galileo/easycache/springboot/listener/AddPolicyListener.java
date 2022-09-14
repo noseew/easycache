@@ -6,6 +6,7 @@ import org.galileo.easycache.core.core.EasyCacheManager;
 import org.galileo.easycache.core.event.AbsCacheOpEventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -19,6 +20,7 @@ import java.util.Map;
 /**
  * 将 Bean 注册到 SimpleCacheManager 中
  */
+@ConditionalOnProperty(value = "easycache.enabled", havingValue = "true", matchIfMissing = false)
 public class AddPolicyListener implements ApplicationListener<ApplicationStartedEvent>, Ordered {
 
     private static Logger logger = LoggerFactory.getLogger(AddPolicyListener.class);
