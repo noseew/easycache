@@ -39,6 +39,10 @@ easycache.ns.dft.remote.type=redis#spring.redis-org.springframework.boot.autocon
 ### 2. 使用注解
 
 ```java
+    // 开启缓存
+    @EnableEasyCache(basePackages = "org.easycachetestlocal")
+
+
     @Cached(cacheName = "user", key = "#id")
     public UserDO get(int id) {
         return userDAO.selectById(id);
